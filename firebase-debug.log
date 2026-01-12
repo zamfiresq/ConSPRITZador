@@ -1,0 +1,181 @@
+[debug] [2026-01-12T16:16:55.684Z] ----------------------------------------------------------------------
+[debug] [2026-01-12T16:16:55.689Z] Command:       /opt/homebrew/Cellar/node/24.1.0/bin/node /opt/homebrew/bin/firebase init
+[debug] [2026-01-12T16:16:55.689Z] CLI Version:   15.2.1
+[debug] [2026-01-12T16:16:55.689Z] Platform:      darwin
+[debug] [2026-01-12T16:16:55.690Z] Node Version:  v24.1.0
+[debug] [2026-01-12T16:16:55.690Z] Time:          Mon Jan 12 2026 18:16:55 GMT+0200 (Eastern European Standard Time)
+[debug] [2026-01-12T16:16:55.690Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/alexandrazamfirescu/ConSPRITZador
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-01-12T16:17:52.274Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-12T16:17:52.274Z] > authorizing via signed-in user (alexandrazamfiresq@gmail.com)
+[debug] [2026-01-12T16:17:52.277Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:52.278Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:52.279Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2026-01-12T16:17:52.968Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-01-12T16:17:52.968Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] 
+=== Firestore Setup
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-01-12T16:17:55.991Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:55.991Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:55.991Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com [none]
+[debug] [2026-01-12T16:17:55.991Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:17:57.194Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com 200
+[debug] [2026-01-12T16:17:57.194Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com [omitted]
+[warn] ⚠  firestore: missing required API firestore.googleapis.com. Enabling now... 
+[debug] [2026-01-12T16:17:57.195Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:57.195Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:17:57.195Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com:enable [none]
+[debug] [2026-01-12T16:17:57.196Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com:enable x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:17:58.462Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com:enable 200
+[debug] [2026-01-12T16:17:58.462Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/firestore.googleapis.com:enable [omitted]
+[debug] [2026-01-12T16:18:08.478Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:08.478Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:08.478Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases [none]
+[debug] [2026-01-12T16:18:09.402Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases 200
+[debug] [2026-01-12T16:18:09.402Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases {}
+[debug] [2026-01-12T16:18:09.403Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:09.403Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:09.403Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/conspritzador/locations [none]
+[debug] [2026-01-12T16:18:09.593Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/conspritzador/locations 200
+[debug] [2026-01-12T16:18:09.594Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/conspritzador/locations {"locations":[{"name":"projects/conspritzador/locations/eur3","labels":{"appengine.googleapis.com/geo":"europe-west","cloud.googleapis.com/location":"eur3","cloud.googleapis.com/geo":"eur3"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"eur3","displayName":"Europe"},{"name":"projects/conspritzador/locations/nam5","labels":{"appengine.googleapis.com/geo":"us-central","cloud.googleapis.com/location":"nam5","cloud.googleapis.com/geo":"nam5"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"nam5","displayName":"United States"},{"name":"projects/conspritzador/locations/nam7","labels":{"cloud.googleapis.com/location":"nam7","cloud.googleapis.com/geo":"nam7"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"nam7","displayName":"United States"},{"name":"projects/conspritzador/locations/africa-south1","labels":{"cloud.googleapis.com/location":"africa-south1","cloud.googleapis.com/region":"africa-south1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"africa-south1","displayName":"Johannesburg"},{"name":"projects/conspritzador/locations/asia-east1","labels":{"appengine.googleapis.com/region":"asia-east1","cloud.googleapis.com/location":"asia-east1","cloud.googleapis.com/region":"asia-east1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-east1","displayName":"Taiwan"},{"name":"projects/conspritzador/locations/asia-east2","labels":{"appengine.googleapis.com/region":"asia-east2","cloud.googleapis.com/location":"asia-east2","cloud.googleapis.com/region":"asia-east2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-east2","displayName":"Hong Kong"},{"name":"projects/conspritzador/locations/asia-northeast1","labels":{"appengine.googleapis.com/region":"asia-northeast1","cloud.googleapis.com/location":"asia-northeast1","cloud.googleapis.com/region":"asia-northeast1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-northeast1","displayName":"Tokyo"},{"name":"projects/conspritzador/locations/asia-northeast2","labels":{"appengine.googleapis.com/region":"asia-northeast2","cloud.googleapis.com/location":"asia-northeast2","cloud.googleapis.com/region":"asia-northeast2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-northeast2","displayName":"Osaka"},{"name":"projects/conspritzador/locations/asia-northeast3","labels":{"appengine.googleapis.com/region":"asia-northeast3","cloud.googleapis.com/location":"asia-northeast3","cloud.googleapis.com/region":"asia-northeast3"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-northeast3","displayName":"Seoul"},{"name":"projects/conspritzador/locations/asia-south1","labels":{"appengine.googleapis.com/region":"asia-south1","cloud.googleapis.com/location":"asia-south1","cloud.googleapis.com/region":"asia-south1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-south1","displayName":"Mumbai"},{"name":"projects/conspritzador/locations/asia-south2","labels":{"cloud.googleapis.com/location":"asia-south2","cloud.googleapis.com/region":"asia-south2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-south2","displayName":"Delhi"},{"name":"projects/conspritzador/locations/asia-southeast1","labels":{"appengine.googleapis.com/region":"asia-southeast1","cloud.googleapis.com/location":"asia-southeast1","cloud.googleapis.com/region":"asia-southeast1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-southeast1","displayName":"Singapore"},{"name":"projects/conspritzador/locations/asia-southeast2","labels":{"appengine.googleapis.com/region":"asia-southeast2","cloud.googleapis.com/location":"asia-southeast2","cloud.googleapis.com/region":"asia-southeast2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-southeast2","displayName":"Jakarta"},{"name":"projects/conspritzador/locations/asia-southeast3","labels":{"cloud.googleapis.com/location":"asia-southeast3","cloud.googleapis.com/region":"asia-southeast3"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"asia-southeast3","displayName":"Bangkok"},{"name":"projects/conspritzador/locations/australia-southeast1","labels":{"appengine.googleapis.com/region":"australia-southeast1","cloud.googleapis.com/location":"australia-southeast1","cloud.googleapis.com/region":"australia-southeast1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"australia-southeast1","displayName":"Sydney"},{"name":"projects/conspritzador/locations/australia-southeast2","labels":{"cloud.googleapis.com/location":"australia-southeast2","cloud.googleapis.com/region":"australia-southeast2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"australia-southeast2","displayName":"Melbourne"},{"name":"projects/conspritzador/locations/europe-central2","labels":{"appengine.googleapis.com/region":"europe-central2","cloud.googleapis.com/location":"europe-central2","cloud.googleapis.com/region":"europe-central2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-central2","displayName":"Warsaw"},{"name":"projects/conspritzador/locations/europe-north1","labels":{"cloud.googleapis.com/location":"europe-north1","cloud.googleapis.com/region":"europe-north1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-north1","displayName":"Finland"},{"name":"projects/conspritzador/locations/europe-north2","labels":{"cloud.googleapis.com/location":"europe-north2","cloud.googleapis.com/region":"europe-north2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-north2","displayName":"Stockholm"},{"name":"projects/conspritzador/locations/europe-southwest1","labels":{"cloud.googleapis.com/location":"europe-southwest1","cloud.googleapis.com/region":"europe-southwest1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-southwest1","displayName":"Madrid"},{"name":"projects/conspritzador/locations/europe-west1","labels":{"cloud.googleapis.com/location":"europe-west1","cloud.googleapis.com/region":"europe-west1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west1","displayName":"Belgium"},{"name":"projects/conspritzador/locations/europe-west10","labels":{"cloud.googleapis.com/location":"europe-west10","cloud.googleapis.com/region":"europe-west10"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west10","displayName":"Berlin"},{"name":"projects/conspritzador/locations/europe-west12","labels":{"cloud.googleapis.com/location":"europe-west12","cloud.googleapis.com/region":"europe-west12"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west12","displayName":"Turin"},{"name":"projects/conspritzador/locations/europe-west2","labels":{"appengine.googleapis.com/region":"europe-west2","cloud.googleapis.com/location":"europe-west2","cloud.googleapis.com/region":"europe-west2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west2","displayName":"London"},{"name":"projects/conspritzador/locations/europe-west3","labels":{"appengine.googleapis.com/region":"europe-west3","cloud.googleapis.com/location":"europe-west3","cloud.googleapis.com/region":"europe-west3"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west3","displayName":"Frankfurt"},{"name":"projects/conspritzador/locations/europe-west4","labels":{"cloud.googleapis.com/location":"europe-west4","cloud.googleapis.com/region":"europe-west4"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west4","displayName":"Netherlands"},{"name":"projects/conspritzador/locations/europe-west6","labels":{"appengine.googleapis.com/region":"europe-west6","cloud.googleapis.com/location":"europe-west6","cloud.googleapis.com/region":"europe-west6"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west6","displayName":"Zurich"},{"name":"projects/conspritzador/locations/europe-west8","labels":{"cloud.googleapis.com/location":"europe-west8","cloud.googleapis.com/region":"europe-west8"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west8","displayName":"Milan"},{"name":"projects/conspritzador/locations/europe-west9","labels":{"cloud.googleapis.com/location":"europe-west9","cloud.googleapis.com/region":"europe-west9"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"europe-west9","displayName":"Paris"},{"name":"projects/conspritzador/locations/me-central1","labels":{"cloud.googleapis.com/location":"me-central1","cloud.googleapis.com/region":"me-central1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"me-central1","displayName":"Doha"},{"name":"projects/conspritzador/locations/me-central2","labels":{"cloud.googleapis.com/location":"me-central2","cloud.googleapis.com/region":"me-central2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"me-central2","displayName":"Dammam"},{"name":"projects/conspritzador/locations/me-west1","labels":{"cloud.googleapis.com/location":"me-west1","cloud.googleapis.com/region":"me-west1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"me-west1","displayName":"Tel Aviv"},{"name":"projects/conspritzador/locations/northamerica-northeast1","labels":{"appengine.googleapis.com/region":"northamerica-northeast1","cloud.googleapis.com/location":"northamerica-northeast1","cloud.googleapis.com/region":"northamerica-northeast1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"northamerica-northeast1","displayName":"Montréal"},{"name":"projects/conspritzador/locations/northamerica-northeast2","labels":{"cloud.googleapis.com/location":"northamerica-northeast2","cloud.googleapis.com/region":"northamerica-northeast2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"northamerica-northeast2","displayName":"Toronto"},{"name":"projects/conspritzador/locations/northamerica-south1","labels":{"cloud.googleapis.com/location":"northamerica-south1","cloud.googleapis.com/region":"northamerica-south1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"northamerica-south1","displayName":"Mexico"},{"name":"projects/conspritzador/locations/southamerica-east1","labels":{"appengine.googleapis.com/region":"southamerica-east1","cloud.googleapis.com/location":"southamerica-east1","cloud.googleapis.com/region":"southamerica-east1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"southamerica-east1","displayName":"São Paulo"},{"name":"projects/conspritzador/locations/southamerica-west1","labels":{"cloud.googleapis.com/location":"southamerica-west1","cloud.googleapis.com/region":"southamerica-west1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"southamerica-west1","displayName":"Santiago"},{"name":"projects/conspritzador/locations/us-central1","labels":{"cloud.googleapis.com/location":"us-central1","cloud.googleapis.com/region":"us-central1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-central1","displayName":"Iowa"},{"name":"projects/conspritzador/locations/us-east1","labels":{"appengine.googleapis.com/region":"us-east1","cloud.googleapis.com/location":"us-east1","cloud.googleapis.com/region":"us-east1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-east1","displayName":"South Carolina"},{"name":"projects/conspritzador/locations/us-east4","labels":{"appengine.googleapis.com/region":"us-east4","cloud.googleapis.com/location":"us-east4","cloud.googleapis.com/region":"us-east4"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-east4","displayName":"Northern Virginia"},{"name":"projects/conspritzador/locations/us-east5","labels":{"cloud.googleapis.com/location":"us-east5","cloud.googleapis.com/region":"us-east5"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-east5","displayName":"Columbus"},{"name":"projects/conspritzador/locations/us-south1","labels":{"cloud.googleapis.com/location":"us-south1","cloud.googleapis.com/region":"us-south1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-south1","displayName":"Dallas"},{"name":"projects/conspritzador/locations/us-west1","labels":{"appengine.googleapis.com/region":"us-west1","cloud.googleapis.com/location":"us-west1","cloud.googleapis.com/region":"us-west1"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-west1","displayName":"Oregon"},{"name":"projects/conspritzador/locations/us-west2","labels":{"appengine.googleapis.com/region":"us-west2","cloud.googleapis.com/location":"us-west2","cloud.googleapis.com/region":"us-west2"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-west2","displayName":"Los Angeles"},{"name":"projects/conspritzador/locations/us-west3","labels":{"appengine.googleapis.com/region":"us-west3","cloud.googleapis.com/location":"us-west3","cloud.googleapis.com/region":"us-west3"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-west3","displayName":"Salt Lake City"},{"name":"projects/conspritzador/locations/us-west4","labels":{"appengine.googleapis.com/region":"us-west4","cloud.googleapis.com/location":"us-west4","cloud.googleapis.com/region":"us-west4"},"metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.LocationMetadata"},"locationId":"us-west4","displayName":"Las Vegas"}]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2026-01-12T16:18:51.870Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:51.870Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:51.871Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/conspritzador/releases pageSize=10&pageToken=
+[debug] [2026-01-12T16:18:53.114Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/conspritzador/releases 200
+[debug] [2026-01-12T16:18:53.114Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/conspritzador/releases {}
+[info] 
+[info] Firestore indexes allow you to perform complex queries while
+[info] maintaining performance that scales with the size of the result
+[info] set. You can keep index definitions in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2026-01-12T16:18:54.936Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:54.936Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:54.937Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:54.937Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:54.937Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2026-01-12T16:18:54.939Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2026-01-12T16:18:55.276Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 404
+[debug] [2026-01-12T16:18:55.276Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"error":{"code":404,"message":"Project 'conspritzador' or database '(default)' does not exist.","status":"NOT_FOUND"}}
+[info] ✔  Wrote firestore.rules 
+[info] ✔  Wrote firestore.indexes.json 
+[info] 
+=== Functions Setup
+[debug] [2026-01-12T16:18:55.285Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-12T16:18:55.285Z] > authorizing via signed-in user (alexandrazamfiresq@gmail.com)
+[debug] [2026-01-12T16:18:55.285Z] [iam] checking project conspritzador for permissions ["firebase.projects.get"]
+[debug] [2026-01-12T16:18:55.286Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:55.286Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:55.286Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/conspritzador:testIamPermissions [none]
+[debug] [2026-01-12T16:18:55.286Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/conspritzador:testIamPermissions x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:18:55.286Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/conspritzador:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-01-12T16:18:55.288Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/indexes 404
+[debug] [2026-01-12T16:18:55.288Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/conspritzador/databases/(default)/collectionGroups/-/indexes {"error":{"code":404,"message":"Project 'conspritzador' or database '(default)' does not exist.","status":"NOT_FOUND"}}
+[debug] [2026-01-12T16:18:56.322Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/conspritzador:testIamPermissions 200
+[debug] [2026-01-12T16:18:56.322Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/conspritzador:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-01-12T16:18:56.323Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:56.323Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:56.324Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:56.324Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:56.324Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-01-12T16:18:56.324Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:18:56.326Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/runtimeconfig.googleapis.com [none]
+[debug] [2026-01-12T16:18:56.326Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:18:57.447Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/runtimeconfig.googleapis.com 200
+[debug] [2026-01-12T16:18:57.447Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2026-01-12T16:18:57.467Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com 200
+[debug] [2026-01-12T16:18:57.467Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-01-12T16:18:57.467Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:57.467Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:18:57.468Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com:enable [none]
+[debug] [2026-01-12T16:18:57.468Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com:enable x-goog-quota-user=projects/conspritzador
+[debug] [2026-01-12T16:18:58.152Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com:enable 200
+[debug] [2026-01-12T16:18:58.152Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/conspritzador/services/cloudfunctions.googleapis.com:enable [omitted]
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] ✔  Wrote functions/package.json 
+[info] ✔  Wrote functions/.eslintrc.js 
+[info] ✔  Wrote functions/tsconfig.dev.json 
+[info] ✔  Wrote functions/tsconfig.json 
+[info] ✔  Wrote functions/src/index.ts 
+[info] ✔  Wrote functions/.gitignore 
+[info] 
+=== Hosting Setup
+[debug] [2026-01-12T16:21:34.688Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:21:34.688Z] Checked if tokens are valid: true, expires at: 1768238094920
+[debug] [2026-01-12T16:21:34.688Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/conspritzador [none]
+[debug] [2026-01-12T16:21:35.682Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/conspritzador 200
+[debug] [2026-01-12T16:21:35.683Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/conspritzador {"projectId":"conspritzador","projectNumber":"642039998093","displayName":"ConSPRITZador","name":"projects/conspritzador","resources":{"hostingSite":"conspritzador"},"state":"ACTIVE","etag":"1_33d37057-de7d-4c97-8c15-7bf3ece5c07e"}
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
+[info] 
+[info] i  Detected a .git folder at /Users/alexandrazamfirescu/ConSPRITZador 
+[info] i  Authorizing with GitHub to upload your service account to a GitHub repository's secrets store. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://github.com/login/oauth/authorize?client_id=89cf50f02ac6aaed3484&state=472348157&redirect_uri=http%3A%2F%2Flocalhost%3A9005&scope=read%3Auser%20repo%20public_repo
+[info] 
+[info] Waiting for authentication...
+[debug] [2026-01-12T16:22:40.136Z] >>> [apiv2][query] POST https://github.com/login/oauth/access_token [none]
+[debug] [2026-01-12T16:22:40.143Z] >>> [apiv2][body] POST https://github.com/login/oauth/access_token [stream]
+[debug] [2026-01-12T16:22:40.657Z] <<< [apiv2][status] POST https://github.com/login/oauth/access_token 200
+[debug] [2026-01-12T16:22:40.658Z] <<< [apiv2][body] POST https://github.com/login/oauth/access_token {"access_token":"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","token_type":"bearer","scope":"read:user,repo"}
+[debug] [2026-01-12T16:22:40.673Z] >>> [apiv2][query] GET https://api.github.com/user [none]
+[debug] [2026-01-12T16:22:41.136Z] <<< [apiv2][status] GET https://api.github.com/user 200
+[debug] [2026-01-12T16:22:41.136Z] <<< [apiv2][body] GET https://api.github.com/user {"login":"zamfiresq","id":102474158,"node_id":"U_kgDOBhuhrg","avatar_url":"https://avatars.githubusercontent.com/u/102474158?v=4","gravatar_id":"","url":"https://api.github.com/users/zamfiresq","html_url":"https://github.com/zamfiresq","followers_url":"https://api.github.com/users/zamfiresq/followers","following_url":"https://api.github.com/users/zamfiresq/following{/other_user}","gists_url":"https://api.github.com/users/zamfiresq/gists{/gist_id}","starred_url":"https://api.github.com/users/zamfiresq/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/zamfiresq/subscriptions","organizations_url":"https://api.github.com/users/zamfiresq/orgs","repos_url":"https://api.github.com/users/zamfiresq/repos","events_url":"https://api.github.com/users/zamfiresq/events{/privacy}","received_events_url":"https://api.github.com/users/zamfiresq/received_events","type":"User","user_view_type":"private","site_admin":false,"name":"Alexandra Zamfirescu","company":null,"blog":"","location":"Bucharest, Romania","email":"alexandrazamfiresq@gmail.com","hireable":null,"bio":"CS student @ Faculty of Mathematics and Computer Science, University of Bucharest","twitter_username":null,"notification_email":"alexandrazamfiresq@gmail.com","public_repos":9,"public_gists":0,"followers":6,"following":9,"created_at":"2022-03-27T14:28:01Z","updated_at":"2025-10-10T10:01:28Z","private_gists":0,"total_private_repos":3,"owned_private_repos":3,"disk_usage":316151,"collaborators":0,"two_factor_authentication":true,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
+[info] 
+[info] ✔  Success! Logged into GitHub as zamfiresq 
+[info] 
+[debug] [2026-01-12T16:22:57.015Z] >>> [apiv2][query] GET https://api.github.com/repos//actions/secrets/public-key type=owner
+[debug] [2026-01-12T16:22:57.400Z] <<< [apiv2][status] GET https://api.github.com/repos//actions/secrets/public-key 404
+[debug] [2026-01-12T16:22:57.400Z] <<< [apiv2][body] GET https://api.github.com/repos//actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest","status":"404"}
+[info] 
+[info] 
+[error] ⚠  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2026-01-12T16:23:14.004Z] >>> [apiv2][query] GET https://api.github.com/repos/zamfiresq/ConSPRITZador/actions/secrets/public-key type=owner
+[debug] [2026-01-12T16:23:14.567Z] <<< [apiv2][status] GET https://api.github.com/repos/zamfiresq/ConSPRITZador/actions/secrets/public-key 404
+[debug] [2026-01-12T16:23:14.567Z] <<< [apiv2][body] GET https://api.github.com/repos/zamfiresq/ConSPRITZador/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest/actions/secrets#get-a-repository-public-key","status":"404"}
+[info] 
+[info] 
+[error] ⚠  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
