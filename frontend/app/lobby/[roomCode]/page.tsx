@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { db, auth } from "@/lib/firebase";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 type Player = {
   name: string;
@@ -15,11 +16,13 @@ type Player = {
 export default function LobbyPage() {
   const params = useParams();
   const roomCode = params?.roomCode as string;
+  const router = useRouter();
 
   const [players, setPlayers] = useState<Record<string, Player>>({});
   const [status, setStatus] = useState("lobby");
   const [hostId, setHostId] = useState<string | null>(null);
   const [showCodePopup, setShowCodePopup] = useState(true);
+
 
   // Firestore realtime subscription
   useEffect(() => {
@@ -49,6 +52,13 @@ export default function LobbyPage() {
     const gameRef = doc(db, "games", roomCode);
     await updateDoc(gameRef, { status: "running" }); // start game
   };
+
+  // useEffect to redirect when game starts
+    useEffect(() => {
+    if (status === "running") {
+      router.push(`/game/${roomCode}`);
+    }
+  }, [status, roomCode, router]);
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white flex flex-col items-center p-8">

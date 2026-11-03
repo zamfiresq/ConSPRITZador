@@ -19,11 +19,11 @@ export default function HostPage() {
     setError(null);
 
     try {
-      // Sign in anonymously
+      // sign in anonymously
       const userCredential = await signInAnonymously(auth);
       const uid = userCredential.user.uid;
 
-      // Generate room code
+      // generate room code
       const code = generateRoomCode();
       setRoomCode(code);
 
