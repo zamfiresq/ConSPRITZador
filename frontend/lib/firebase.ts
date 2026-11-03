@@ -1,10 +1,10 @@
 "use client";
 
-import { initializeApp } from "firebase/app";
+import { getApp, getApps, initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { browserSessionPersistence, getAuth, initializeAuth, signInAnonymously } from "firebase/auth";
+import type { User } from "firebase/auth";
 
-// Firebase config using Next.js environment variables (NEXT_PUBLIC_ prefix required for frontend)
 const firebaseConfig = {
   apiKey: "AIzaSyDZZyc8OzHbBRBBs2_8TDdYlps-IF9CFow",
   authDomain: "conspritzador.firebaseapp.com",
@@ -15,8 +15,30 @@ const firebaseConfig = {
   measurementId: "G-RQ26Y0RBTD",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+/**
+ * Persistență pe SESIUNE (per tab): fiecare tab primește propriul jucător anonim.
+ * Cu persistența implicită (localStorage/IndexedDB) toate tab-urile aceluiași browser
+ * împart același uid, deci nu poți testa jocul cu 2-3 ferestre.
+ */
+function makeAuth() {
+  if (typeof window === "undefined") return getAuth(app);
+  try {
+    return initializeAuth(app, { persistence: browserSessionPersistence });
+  } catch {
+    return getAuth(app); // deja inițializat (hot reload)
+  }
+}
+
+export const auth = makeAuth();
 export const db = getFirestore(app);
+
+/** Returnează utilizatorul curent; dacă nu există, face login anonim. */
+export async function ensureUser(): Promise<User> {
+  await auth.authStateReady();
+  if (auth.currentUser) return auth.currentUser;
+  return (await signInAnonymously(auth)).user;
+}
+
 export { signInAnonymously, doc, setDoc, serverTimestamp, getDoc, updateDoc };

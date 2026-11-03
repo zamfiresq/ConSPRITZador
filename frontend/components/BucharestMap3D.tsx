@@ -362,14 +362,40 @@ export default function BucharestMap3D({
 
   return (
     <div
-      className="relative h-[600px] w-full overflow-hidden rounded-lg shadow-2xl"
-      style={{ background: 'radial-gradient(ellipse at 50% 38%, #7d5629 0%, #4b3117 48%, #1c1109 100%)' }}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        minHeight: 360,
+        overflow: 'hidden',
+        background: 'radial-gradient(ellipse at 50% 38%, #7d5629 0%, #4b3117 48%, #1c1109 100%)',
+      }}
     >
       {!territories && !error && (
-        <div className="absolute inset-0 flex items-center justify-center text-amber-100/80">Se încarcă harta…</div>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'rgba(255,240,200,.8)',
+          }}
+        >
+          Se încarcă harta…
+        </div>
       )}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center text-red-300">
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fca5a5',
+          }}
+        >
           Nu s-a putut încărca harta ({error})
         </div>
       )}
@@ -393,14 +419,7 @@ export default function BucharestMap3D({
       )}
 
       {/* vignette */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{ boxShadow: 'inset 0 0 120px 30px rgba(0,0,0,.55)' }}
-      />
-
-      <div className="pointer-events-none absolute bottom-3 left-3 rounded-md bg-black/45 px-3 py-1.5 text-xs text-amber-100/90 backdrop-blur-sm">
-        Drag: rotește · Scroll: zoom · Click: alege teritoriul
-      </div>
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', boxShadow: 'inset 0 0 120px 30px rgba(0,0,0,.55)' }} />
     </div>
   );
 }

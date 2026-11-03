@@ -1,0 +1,179 @@
+/* Teme comune pentru host / join / lobby – aceeași paletă ca ecranul de joc */
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 30%, #7d5629 0%, #4b3117 50%, #1c1109 100%);
+  color: #f6e7bf;
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+.panel {
+  width: 100%;
+  max-width: 440px;
+  padding: 28px 26px;
+  border-radius: 14px;
+  border: 2px solid #8a6a2c;
+  background: linear-gradient(#3b2713, #1f140a);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+.brand {
+  font-size: 26px;
+  font-weight: 800;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+.brand span {
+  color: #ffd86b;
+}
+.title {
+  margin: 4px 0 18px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c9a45a;
+}
+.label {
+  display: block;
+  margin: 12px 0 6px;
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #b99556;
+}
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 2px solid #5b4120;
+  background: #150d06;
+  color: #fff3cf;
+  font-size: 17px;
+  outline: none;
+}
+.input:focus {
+  border-color: #ffd86b;
+}
+.codeInput {
+  text-align: center;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 26px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+.btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #ffe08a;
+  background: linear-gradient(#f6c94b, #c8901d);
+  color: #2b1a05;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #7a520e, 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+.btn:hover:enabled {
+  filter: brightness(1.08);
+}
+.btn:active:enabled {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #7a520e;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  border-color: #5b4120;
+  background: #3a2a17;
+  color: #8f7a52;
+  box-shadow: none;
+}
+.btnGhost {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #5b4120;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e8d49b;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.error {
+  margin-top: 14px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: rgba(217, 68, 58, 0.18);
+  border: 1px solid #b2382e;
+  color: #ffb3aa;
+  font-size: 14px;
+}
+.bigCode {
+  display: inline-block;
+  margin: 4px 0 2px;
+  padding: 6px 18px;
+  border-radius: 10px;
+  border: 2px dashed #8a6a2c;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 8px;
+  color: #ffd86b;
+}
+.hint {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #b99556;
+}
+.list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 2px solid #5b4120;
+  background: #150d06;
+  text-align: left;
+}
+.rowMe {
+  border-color: #ffd86b;
+}
+.dot {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.rowName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.tag {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c9a45a;
+}
+.empty {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 2px dashed #4a361b;
+  color: #6f5a35;
+  font-size: 14px;
+}

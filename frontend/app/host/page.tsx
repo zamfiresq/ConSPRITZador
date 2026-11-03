@@ -1,82 +1,85 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { auth, db, signInAnonymously, doc, setDoc, serverTimestamp } from "@/lib/firebase";
-
-function generateRoomCode() {
-  return Math.random().toString(36).substring(2, 7).toUpperCase();
-}
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { db, doc, getDoc, setDoc, serverTimestamp, ensureUser } from "@/lib/firebase";
+import { PALETTE, cleanName, generateRoomCode } from "@/lib/game-utils";
+import ui from "../ui.module.css";
 
 export default function HostPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [roomCode, setRoomCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleCreateGame = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      // sign in anonymously
-      const userCredential = await signInAnonymously(auth);
-      const uid = userCredential.user.uid;
+      const user = await ensureUser();
+      const uid = user.uid;
 
-      // generate room code
-      const code = generateRoomCode();
-      setRoomCode(code);
+      // cod liber (evită coliziunile)
+      let code = generateRoomCode();
+      for (let i = 0; i < 5 && (await getDoc(doc(db, "games", code))).exists(); i++) {
+        code = generateRoomCode();
+      }
 
-      // Create Firestore document
       await setDoc(doc(db, "games", code), {
         hostId: uid,
         status: "lobby",
         createdAt: serverTimestamp(),
+        round: 1,
+        currentTurn: uid,
+        zones: {},
         players: {
           [uid]: {
-            name: "Host", // could be customized later
-            color: "emerald",
+            name: cleanName(name, "Host"),
+            color: PALETTE[0],
             score: 0,
-          }
-        }
+            joinedAt: serverTimestamp(),
+          },
+        },
       });
 
-      // Redirect to lobby
       router.push(`/lobby/${code}`);
     } catch (err) {
       console.error("Error creating game:", err);
-      setError("Failed to create game. Please try again.");
-    } finally {
+      setError("Nu s-a putut crea camera. Verifică regulile Firestore și consola (F12).");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center">
-      <div className="w-full max-w-md text-center p-8 rounded-2xl bg-zinc-800 shadow-xl">
-        <h1 className="text-3xl font-bold mb-6">Host Game</h1>
+    <div className={ui.page}>
+      <div className={ui.panel}>
+        <div className={ui.brand}>
+          Con<span>SPRITZ</span>ador
+        </div>
+        <div className={ui.title}>Creează o cameră</div>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <label className={ui.label} htmlFor="name">
+          Numele tău
+        </label>
+        <input
+          id="name"
+          className={ui.input}
+          value={name}
+          maxLength={16}
+          placeholder="Host"
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !loading && handleCreateGame()}
+        />
 
-        {!roomCode ? (
-          <button
-            onClick={handleCreateGame}
-            disabled={loading}
-            className="w-full rounded-xl bg-emerald-500 py-4 text-lg font-semibold text-black hover:bg-emerald-400 transition disabled:opacity-50"
-          >
-            {loading ? "Creating game..." : "Create Game"}
-          </button>
-        ) : (
-          <div className="space-y-4">
-            <p className="text-zinc-300">Room code:</p>
-            <div className="text-4xl font-extrabold tracking-widest text-emerald-400">
-              {roomCode}
-            </div>
-            <p className="text-sm text-zinc-400">
-              Share this code with your friends
-            </p>
-          </div>
-        )}
+        {error && <div className={ui.error}>{error}</div>}
+
+        <button className={ui.btn} onClick={handleCreateGame} disabled={loading}>
+          {loading ? "Se creează…" : "Creează camera"}
+        </button>
+        <Link href="/" className={ui.btnGhost}>
+          ← Înapoi
+        </Link>
       </div>
     </div>
   );

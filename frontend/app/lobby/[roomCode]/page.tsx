@@ -1,103 +1,153 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import { db, auth } from "@/lib/firebase";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
+import { auth, db } from "@/lib/firebase";
+import { MAX_PLAYERS, Player, colorFor, orderPlayers } from "@/lib/game-utils";
+import ui from "../../ui.module.css";
 
-type Player = {
-  name: string;
-  color: string;
-  score: number;
-  joinedAt?: any;
-};
+type Lobby = { players: Record<string, Player>; status: string; hostId: string };
 
 export default function LobbyPage() {
   const params = useParams();
   const roomCode = params?.roomCode as string;
   const router = useRouter();
 
-  const [players, setPlayers] = useState<Record<string, Player>>({});
-  const [status, setStatus] = useState("lobby");
-  const [hostId, setHostId] = useState<string | null>(null);
-  const [showCodePopup, setShowCodePopup] = useState(true);
+  const [lobby, setLobby] = useState<Lobby | null>(null);
+  const [exists, setExists] = useState(true);
+  const [uid, setUid] = useState("");
+  const [starting, setStarting] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-
-  // Firestore realtime subscription
+  // uid reactiv (auth se restaurează asincron)
   useEffect(() => {
-    const gameRef = doc(db, "games", roomCode);
-    const unsubscribe = onSnapshot(gameRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setPlayers(data.players || {});
-        setStatus(data.status || "lobby");
-        setHostId(data.hostId || null);
-      }
-    });
-    return () => unsubscribe();
-  }, [roomCode]);
-
-  // Auto-hide popup after longer time (10 seconds)
-  useEffect(() => {
-    const timer = setTimeout(() => setShowCodePopup(false), 10000);
-    return () => clearTimeout(timer);
+    const unsub = auth.onAuthStateChanged((u) => setUid(u?.uid ?? ""));
+    return () => unsub();
   }, []);
 
-  const currentUserUid = auth.currentUser?.uid;
-  const isHost = currentUserUid === hostId;
+  useEffect(() => {
+    if (!roomCode) return;
+    const unsub = onSnapshot(
+      doc(db, "games", roomCode),
+      (snap) => {
+        if (!snap.exists()) return setExists(false);
+        const d = snap.data();
+        setExists(true);
+        setLobby({ players: d.players ?? {}, status: d.status ?? "lobby", hostId: d.hostId });
+      },
+      (err) => console.error("Lobby snapshot:", err)
+    );
+    return () => unsub();
+  }, [roomCode]);
 
-  const handleStartGame = async () => {
-    if (!isHost) return;
-    const gameRef = doc(db, "games", roomCode);
-    await updateDoc(gameRef, { status: "running" }); // start game
+  // toți jucătorii sunt duși în joc când gazda pornește
+  useEffect(() => {
+    if (lobby?.status === "running") router.push(`/game/${roomCode}`);
+  }, [lobby?.status, roomCode, router]);
+
+  const ordered = useMemo(() => (lobby ? orderPlayers(lobby.players, lobby.hostId) : []), [lobby]);
+
+  if (!exists) {
+    return (
+      <div className={ui.page}>
+        <div className={ui.panel}>
+          <div className={ui.brand}>Camera {roomCode} nu există</div>
+          <Link href="/" className={ui.btnGhost}>
+            ← Acasă
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  if (!lobby) {
+    return (
+      <div className={ui.page}>
+        <div className={ui.panel}>Se încarcă camera…</div>
+      </div>
+    );
+  }
+
+  const isHost = !!uid && uid === lobby.hostId;
+  const isMember = !!uid && !!lobby.players[uid];
+
+  const handleStart = async () => {
+    if (!isHost || starting) return;
+    setStarting(true);
+    try {
+      await updateDoc(doc(db, "games", roomCode), {
+        status: "running",
+        currentTurn: lobby.hostId,
+        round: 1,
+        zones: {},
+      });
+    } catch (e) {
+      console.error("Start game:", e);
+      setStarting(false);
+    }
   };
 
-  // useEffect to redirect when game starts
-    useEffect(() => {
-    if (status === "running") {
-      router.push(`/game/${roomCode}`);
-    }
-  }, [status, roomCode, router]);
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(roomCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {}
+  };
+
+  const emptySlots = Math.max(0, MAX_PLAYERS - ordered.length);
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white flex flex-col items-center p-8">
-      <h1 className="text-3xl font-bold mb-4">Lobby – Room {roomCode}</h1>
-
-      {showCodePopup && (
-        <div className="mb-4 px-4 py-2 bg-zinc-800 rounded-xl shadow-md animate-fade-in">
-          <p className="text-sm text-zinc-300">
-            Share this code with your friends: <strong>{roomCode}</strong>
-          </p>
+    <div className={ui.page}>
+      <div className={ui.panel}>
+        <div className={ui.brand}>
+          Con<span>SPRITZ</span>ador
         </div>
-      )}
+        <div className={ui.title}>Lobby</div>
 
-      <div className="w-full max-w-md bg-zinc-800 p-6 rounded-2xl shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Players in Lobby</h2>
-        <ul className="space-y-2">
-          {Object.entries(players).map(([uid, player]) => (
-            <li key={uid} className="flex items-center gap-2">
-              <span
-                className={`w-4 h-4 rounded-full bg-${player.color}-400`}
-              ></span>
-              <span>{player.name}{uid === hostId ? " (Host)" : ""}</span>
+        <div className={ui.bigCode}>{roomCode}</div>
+        <div>
+          <button className={ui.btnGhost} onClick={copyCode}>
+            {copied ? "Copiat ✓" : "Copiază codul"}
+          </button>
+        </div>
+
+        <ul className={ui.list}>
+          {ordered.map(([id, p], i) => (
+            <li key={id} className={`${ui.row} ${id === uid ? ui.rowMe : ""}`}>
+              <span className={ui.dot} style={{ background: colorFor(p, i) }} />
+              <span className={ui.rowName}>{p.name}</span>
+              {id === lobby.hostId && <span className={ui.tag}>gazdă</span>}
+              {id === uid && <span className={ui.tag}>tu</span>}
+            </li>
+          ))}
+          {Array.from({ length: emptySlots }).map((_, i) => (
+            <li key={`empty-${i}`} className={ui.empty}>
+              Se așteaptă un jucător…
             </li>
           ))}
         </ul>
 
-        {isHost && (
-          <button
-            onClick={handleStartGame}
-            className="mt-6 w-full py-3 bg-emerald-500 rounded-xl text-black font-semibold hover:bg-emerald-400 transition"
-          >
-            Start Game
-          </button>
+        {!isMember && uid && (
+          <div className={ui.error}>
+            Nu ești în această cameră. <Link href="/join">Intră cu codul</Link>.
+          </div>
         )}
 
-        {!isHost && (
-          <p className="mt-6 text-sm text-zinc-400 text-center">
-            Waiting for the host to start the game...
-          </p>
+        {isHost ? (
+          <>
+            <button className={ui.btn} onClick={handleStart} disabled={starting}>
+              {starting ? "Se pornește…" : "Pornește jocul"}
+            </button>
+            <div className={ui.hint}>
+              {ordered.length < MAX_PLAYERS
+                ? `Recomandat ${MAX_PLAYERS} jucători (acum: ${ordered.length}).`
+                : "Toți jucătorii sunt aici!"}
+            </div>
+          </>
+        ) : (
+          <div className={ui.hint}>Se așteaptă ca gazda să pornească jocul…</div>
         )}
       </div>
     </div>

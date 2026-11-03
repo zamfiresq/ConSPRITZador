@@ -1,79 +1,120 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { auth, db, signInAnonymously, doc, setDoc, serverTimestamp } from "@/lib/firebase";
-import { getDoc, updateDoc } from "firebase/firestore";
+import { FieldPath, updateDoc as updateDocFs } from "firebase/firestore";
+import { db, doc, getDoc, serverTimestamp, ensureUser } from "@/lib/firebase";
+import { MAX_PLAYERS, Player, cleanName, nextFreeColor } from "@/lib/game-utils";
+import ui from "../ui.module.css";
 
 export default function JoinPage() {
+  const router = useRouter();
   const [code, setCode] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleJoin = async () => {
-    if (!code) return;
+    const roomCode = code.trim().toUpperCase();
+    if (!roomCode) {
+      setError("Introdu codul camerei.");
+      return;
+    }
     setLoading(true);
     setError(null);
 
     try {
-      // Sign in anonymously
-      const userCredential = await signInAnonymously(auth);
-      const uid = userCredential.user.uid;
+      const user = await ensureUser();
+      const uid = user.uid;
 
-      // Check if game exists
-      const gameRef = doc(db, "games", code);
-      const gameSnap = await getDoc(gameRef);
-
-      if (!gameSnap.exists()) {
-        setError("Room code not found.");
+      const gameRef = doc(db, "games", roomCode);
+      const snap = await getDoc(gameRef);
+      if (!snap.exists()) {
+        setError(`Camera ${roomCode} nu există.`);
         setLoading(false);
         return;
       }
 
-      // Add player to game
-      const playerData = {
-        name: "Player", // can be customized
-        color: "sky",
+      const data = snap.data();
+      const players = (data.players ?? {}) as Record<string, Player>;
+
+      // deja în cameră (refresh / revenire) – nu rescriem scorul
+      if (players[uid]) {
+        router.push(data.status === "running" ? `/game/${roomCode}` : `/lobby/${roomCode}`);
+        return;
+      }
+      if (data.status !== "lobby") {
+        setError("Jocul a început deja în această cameră.");
+        setLoading(false);
+        return;
+      }
+      if (Object.keys(players).length >= MAX_PLAYERS) {
+        setError(`Camera este plină (maxim ${MAX_PLAYERS} jucători).`);
+        setLoading(false);
+        return;
+      }
+
+      const player: Player = {
+        name: cleanName(name, "Jucător"),
+        color: nextFreeColor(players),
         score: 0,
-        joinedAt: serverTimestamp()
+        joinedAt: serverTimestamp() as unknown as Player["joinedAt"],
       };
+      await updateDocFs(gameRef, new FieldPath("players", uid), player);
 
-      await updateDoc(gameRef, {
-        [`players.${uid}`]: playerData
-      });
-
-      // Redirect to lobby
-      router.push(`/lobby/${code}`);
+      router.push(`/lobby/${roomCode}`);
     } catch (err) {
       console.error("Error joining game:", err);
-      setError("Failed to join game. Please try again.");
-    } finally {
+      setError("Nu te-ai putut alătura. Verifică consola (F12) pentru detalii.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white flex flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-bold mb-6">Join Game</h1>
+    <div className={ui.page}>
+      <div className={ui.panel}>
+        <div className={ui.brand}>
+          Con<span>SPRITZ</span>ador
+        </div>
+        <div className={ui.title}>Intră într-o cameră</div>
 
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+        <label className={ui.label} htmlFor="code">
+          Codul camerei
+        </label>
+        <input
+          id="code"
+          className={`${ui.input} ${ui.codeInput}`}
+          value={code}
+          maxLength={5}
+          placeholder="XXXXX"
+          autoCapitalize="characters"
+          onChange={(e) => setCode(e.target.value.toUpperCase())}
+          onKeyDown={(e) => e.key === "Enter" && !loading && handleJoin()}
+        />
 
-      <input
-        type="text"
-        placeholder="Enter Room Code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        className="mb-4 px-4 py-2 rounded-xl bg-zinc-800 text-white border border-zinc-600 w-64 text-center"
-      />
+        <label className={ui.label} htmlFor="name">
+          Numele tău
+        </label>
+        <input
+          id="name"
+          className={ui.input}
+          value={name}
+          maxLength={16}
+          placeholder="Jucător"
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !loading && handleJoin()}
+        />
 
-      <button
-        onClick={handleJoin}
-        disabled={loading}
-        className="w-64 py-3 bg-emerald-500 rounded-xl text-black font-semibold hover:bg-emerald-400 transition disabled:opacity-50"
-      >
-        {loading ? "Joining..." : "Join"}
-      </button>
+        {error && <div className={ui.error}>{error}</div>}
+
+        <button className={ui.btn} onClick={handleJoin} disabled={loading}>
+          {loading ? "Se conectează…" : "Intră"}
+        </button>
+        <Link href="/" className={ui.btnGhost}>
+          ← Înapoi
+        </Link>
+      </div>
     </div>
   );
 }
