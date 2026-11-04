@@ -51,11 +51,8 @@ export default function HomePage() {
           Con<span>spritz</span>ädor
         </h1>
         <p className={styles.tagline}>
-          Cucerește cartierele Bucureștiului.
-          <br />
-          Răspunde rapid. Controlează harta.
+          Care cucerește mai mare Bucureștiul?
         </p>
-
         <div className={styles.actions}>
           <Link href="/host" className={styles.btnPrimary}>
             Creează joc

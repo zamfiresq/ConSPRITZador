@@ -877,9 +877,13 @@ __turbopack_context__.v({
   "room": "game-module__iz5jkW__room",
   "root": "game-module__iz5jkW__root",
   "score": "game-module__iz5jkW__score",
+  "timer": "game-module__iz5jkW__timer",
+  "timerBar": "game-module__iz5jkW__timerBar",
+  "timerUrgent": "game-module__iz5jkW__timerUrgent",
   "top": "game-module__iz5jkW__top",
   "turnBadge": "game-module__iz5jkW__turnBadge",
   "turnMine": "game-module__iz5jkW__turnMine",
+  "urgent": "game-module__iz5jkW__urgent",
 });
 }),
 "[project]/app/game/[roomCode]/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
@@ -897,6 +901,16 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$firebase$2f$
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@firebase/firestore/dist/index.esm.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/lib/firebase.ts [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BucharestMap3D$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/BucharestMap3D.tsx [app-client] (ecmascript)");
+(()=>{
+    const e = new Error("Cannot find module '@/components/Chat'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
+(()=>{
+    const e = new Error("Cannot find module '@/lib/territories'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/game-utils.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__ = __turbopack_context__.i("[project]/app/game/[roomCode]/game.module.css [app-client] (css module)");
 ;
@@ -910,15 +924,25 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+;
+const TURN_SECONDS = 10; // timp pentru a alege un teritoriu
+const GRACE_SECONDS = 5; // după atât, gazda alege în locul unui jucător deconectat
+const CLICK_AGAIN_CONFIRMS = true; // al doilea click pe teritoriul marcat = confirmare (la fel ca Enter)
 function GamePage() {
     _s();
     const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
     const roomCode = params.roomCode;
     const [game, setGame] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [uid, setUid] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    const [selected, setSelected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [selected, setSelected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null); // teritoriul "marcat" cu săgeata
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [claiming, setClaiming] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [remaining, setRemaining] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(TURN_SECONDS);
+    const claimingRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(false);
+    const firedFor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(-1); // tura pentru care s-a declanșat deja alegerea automată
+    const { territories } = useTerritories();
+    // ───────────── date din Firestore ─────────────
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "GamePage.useEffect": ()=>{
             const unsub = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["auth"].onAuthStateChanged({
@@ -950,6 +974,7 @@ function GamePage() {
     }["GamePage.useEffect"], [
         roomCode
     ]);
+    // ───────────── valori derivate (sigure și cât timp `game` e încă null) ─────────────
     const ordered = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "GamePage.useMemo[ordered]": ()=>game ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["orderPlayers"])(game.players ?? {}, game.hostId) : []
     }["GamePage.useMemo[ordered]"], [
@@ -968,12 +993,187 @@ function GamePage() {
     }["GamePage.useMemo[playersData]"], [
         ordered
     ]);
+    const zones = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "GamePage.useMemo[zones]": ()=>game?.zones ?? {}
+    }["GamePage.useMemo[zones]"], [
+        game
+    ]);
+    const turnUid = game ? game.currentTurn || game.hostId : "";
+    const turnNumber = game?.turnNumber ?? 0;
+    const myTurn = !!uid && turnUid === uid;
+    const isHost = !!game && !!uid && game.hostId === uid;
+    const finished = !!territories && territories.every((t)=>!!zones[t.id]);
+    // teritoriile pe care le pot alege acum (null = nu e rândul meu / fără restricții)
+    const allowed = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "GamePage.useMemo[allowed]": ()=>territories && myTurn && !finished ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["allowedTerritories"])(territories, zones, uid) : null
+    }["GamePage.useMemo[allowed]"], [
+        territories,
+        myTurn,
+        finished,
+        zones,
+        uid
+    ]);
+    // ───────────── alegerea unui teritoriu (tranzacție = fără dubluri) ─────────────
+    const claim = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "GamePage.useCallback[claim]": async (forUid, preferred, auto)=>{
+            if (!territories || claimingRef.current) return;
+            claimingRef.current = true;
+            setClaiming(true);
+            let claimedId = "";
+            let claimedBy = "";
+            try {
+                const ref = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["db"], "games", roomCode);
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["runTransaction"])(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["db"], {
+                    "GamePage.useCallback[claim]": async (tx)=>{
+                        const snap = await tx.get(ref);
+                        if (!snap.exists()) return;
+                        const g = snap.data();
+                        // altcineva a ales deja (ex. gazda după timeout) sau nu mai e rândul lui
+                        if ((g.currentTurn || g.hostId) !== forUid) return;
+                        const free = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["allowedTerritories"])(territories, g.zones ?? {}, forUid);
+                        if (free.length === 0) return;
+                        let pick = preferred && free.includes(preferred) ? preferred : null;
+                        if (!pick) {
+                            if (!auto) return; // alegere manuală nepermisă (nu e vecin)
+                            pick = free[Math.floor(Math.random() * free.length)];
+                        }
+                        const uids = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["orderPlayers"])(g.players ?? {}, g.hostId).map({
+                            "GamePage.useCallback[claim].uids": ([id])=>id
+                        }["GamePage.useCallback[claim].uids"]);
+                        const idx = uids.indexOf(forUid);
+                        if (idx === -1) return;
+                        tx.update(ref, new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldPath"]("zones", pick), forUid, "currentTurn", uids[(idx + 1) % uids.length], "round", (g.round ?? 1) + (idx === uids.length - 1 ? 1 : 0), "turnNumber", (g.turnNumber ?? 0) + 1, new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldPath"]("players", forUid, "score"), (g.players?.[forUid]?.score ?? 0) + 100);
+                        claimedId = pick;
+                        claimedBy = g.players?.[forUid]?.name ?? "Jucător";
+                    }
+                }["GamePage.useCallback[claim]"]);
+                if (claimedId) {
+                    setSelected(null);
+                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addDoc"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["db"], "games", roomCode, "messages"), {
+                        type: "system",
+                        uid: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["auth"].currentUser?.uid ?? forUid,
+                        name: claimedBy,
+                        color: "",
+                        text: `${claimedBy} a cucerit ${claimedId}${auto ? " (ales automat)" : ""}.`,
+                        createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["serverTimestamp"])()
+                    }).catch({
+                        "GamePage.useCallback[claim]": (e)=>console.error("Mesaj de sistem:", e)
+                    }["GamePage.useCallback[claim]"]);
+                }
+            } catch (err) {
+                console.error("Nu s-a putut cuceri teritoriul:", err);
+            } finally{
+                claimingRef.current = false;
+                setClaiming(false);
+            }
+        }
+    }["GamePage.useCallback[claim]"], [
+        territories,
+        roomCode
+    ]);
+    // cele mai recente valori, citite din intervale și din ascultătorul de tastatură
+    const latest = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])({
+        myTurn,
+        isHost,
+        turnUid,
+        selected,
+        uid,
+        allowed,
+        claim
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GamePage.useEffect": ()=>{
+            latest.current = {
+                myTurn,
+                isHost,
+                turnUid,
+                selected,
+                uid,
+                allowed,
+                claim
+            };
+        }
+    }["GamePage.useEffect"]);
+    const confirmPinned = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "GamePage.useCallback[confirmPinned]": ()=>{
+            const l = latest.current;
+            if (l.myTurn && l.selected && l.allowed?.includes(l.selected)) void l.claim(l.uid, l.selected, false);
+        }
+    }["GamePage.useCallback[confirmPinned]"], []);
+    // ───────────── cronometrul de 10 secunde ─────────────
+    const hasGame = !!game;
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GamePage.useEffect": ()=>{
+            setSelected(null); // marcajul nu trece la tura următoare
+        }
+    }["GamePage.useEffect"], [
+        turnNumber
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GamePage.useEffect": ()=>{
+            if (!hasGame || finished) return;
+            const end = Date.now() + TURN_SECONDS * 1000;
+            setRemaining(TURN_SECONDS);
+            const id = setInterval({
+                "GamePage.useEffect.id": ()=>{
+                    const left = (end - Date.now()) / 1000;
+                    setRemaining(left);
+                    if (firedFor.current === turnNumber) return;
+                    const l = latest.current;
+                    if (left <= 0 && l.myTurn) {
+                        // timpul a expirat: se alege teritoriul marcat sau unul la întâmplare
+                        firedFor.current = turnNumber;
+                        void l.claim(l.uid, l.selected, true);
+                    } else if (left <= -GRACE_SECONDS && l.isHost && !l.myTurn) {
+                        // jucătorul curent nu a răspuns (deconectat?) => gazda alege în locul lui
+                        firedFor.current = turnNumber;
+                        void l.claim(l.turnUid, null, true);
+                    }
+                }
+            }["GamePage.useEffect.id"], 200);
+            return ({
+                "GamePage.useEffect": ()=>clearInterval(id)
+            })["GamePage.useEffect"];
+        }
+    }["GamePage.useEffect"], [
+        turnNumber,
+        finished,
+        hasGame
+    ]);
+    // ───────────── Enter confirmă teritoriul marcat ─────────────
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GamePage.useEffect": ()=>{
+            const onKey = {
+                "GamePage.useEffect.onKey": (e)=>{
+                    if (e.key !== "Enter") return;
+                    const el = e.target;
+                    if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) return; // scrii în chat
+                    e.preventDefault();
+                    confirmPinned();
+                }
+            }["GamePage.useEffect.onKey"];
+            window.addEventListener("keydown", onKey);
+            return ({
+                "GamePage.useEffect": ()=>window.removeEventListener("keydown", onKey)
+            })["GamePage.useEffect"];
+        }
+    }["GamePage.useEffect"], [
+        confirmPinned
+    ]);
+    const handleSelect = (d)=>{
+        if (CLICK_AGAIN_CONFIRMS && myTurn && selected === d.id) {
+            confirmPinned();
+            return;
+        }
+        setSelected(d.id);
+    };
+    // ───────────── ecrane de stare ─────────────
     if (loading) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].center,
         children: "Se încarcă jocul…"
     }, void 0, false, {
         fileName: "[project]/app/game/[roomCode]/page.tsx",
-        lineNumber: 62,
+        lineNumber: 231,
         columnNumber: 23
     }, this);
     if (!game) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -985,40 +1185,30 @@ function GamePage() {
         ]
     }, void 0, true, {
         fileName: "[project]/app/game/[roomCode]/page.tsx",
-        lineNumber: 63,
+        lineNumber: 232,
         columnNumber: 21
     }, this);
-    const zones = game.zones ?? {};
-    const turnUid = game.currentTurn || game.hostId; // camerele vechi nu au currentTurn
-    const myTurn = !!uid && turnUid === uid;
     const turnName = playersData[turnUid]?.name ?? "—";
-    const selectedOwner = selected ? zones[selected] : undefined;
-    const canClaim = myTurn && !!selected && !selectedOwner && !claiming;
-    const handleSelect = (d)=>setSelected(d.id);
-    const handleClaim = async ()=>{
-        if (!canClaim || !selected) return;
-        const uids = ordered.map(([id])=>id);
-        const idx = uids.indexOf(uid);
-        if (idx === -1) return;
-        const next = uids[(idx + 1) % uids.length];
-        const wrapped = idx === uids.length - 1;
-        setClaiming(true);
-        try {
-            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateDoc"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["db"], "games", roomCode), new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldPath"]("zones", selected), uid, "currentTurn", next, "round", (game.round ?? 1) + (wrapped ? 1 : 0), new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldPath"]("players", uid, "score"), (game.players[uid]?.score ?? 0) + 100);
-            setSelected(null);
-        } catch (err) {
-            console.error("Nu s-a putut cuceri teritoriul:", err);
-        } finally{
-            setClaiming(false);
-        }
-    };
+    const me = uid ? playersData[uid] : undefined;
     const territoryCount = (id)=>Object.values(zones).filter((z)=>z === id).length;
-    let info = "Click pe hartă pentru a alege un teritoriu.";
-    if (selected) {
-        info = selectedOwner ? `Cucerit de ${playersData[selectedOwner]?.name ?? "alt jucător"}.` : "Teritoriu liber.";
-    }
+    const winner = finished ? [
+        ...ordered
+    ].sort(([a, pa], [b, pb])=>territoryCount(b) - territoryCount(a) || (pb.score ?? 0) - (pa.score ?? 0))[0] : null;
+    const pct = Math.max(0, Math.min(100, remaining / TURN_SECONDS * 100));
+    const urgent = remaining <= 3;
+    // textul din panoul de acțiune
+    const selectedOwner = selected ? zones[selected] : undefined;
+    let info;
+    if (finished) info = "Toate teritoriile au fost cucerite.";
+    else if (!myTurn) info = "Așteaptă să-ți vină rândul.";
+    else if (selected && allowed?.includes(selected)) info = "Enter sau click din nou pentru a confirma.";
+    else if (selected && selectedOwner) info = `Cucerit de ${playersData[selectedOwner]?.name ?? "alt jucător"}.`;
+    else if (territories && territories.some((t)=>zones[t.id] === uid)) info = "Alege un teritoriu liber, vecin cu ale tale.";
+    else info = "Alege orice teritoriu liber.";
+    const canConfirm = myTurn && !finished && !claiming && !!selected && !!allowed?.includes(selected);
     let btnText = "Așteaptă-ți rândul";
-    if (myTurn) btnText = selected && !selectedOwner ? "Cucerește" : "Alege un teritoriu liber";
+    if (finished) btnText = "Joc încheiat";
+    else if (myTurn) btnText = canConfirm ? "Cucerește (Enter)" : "Alege un teritoriu";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].root,
         children: [
@@ -1027,16 +1217,17 @@ function GamePage() {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BucharestMap3D$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     selectedDistrict: selected,
                     onDistrictClick: handleSelect,
+                    allowedDistricts: allowed,
                     zones: zones,
                     playersData: playersData
                 }, void 0, false, {
                     fileName: "[project]/app/game/[roomCode]/page.tsx",
-                    lineNumber: 114,
+                    lineNumber: 266,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                lineNumber: 113,
+                lineNumber: 265,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1050,7 +1241,7 @@ function GamePage() {
                                 children: "spritz"
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 124,
+                                lineNumber: 277,
                                 columnNumber: 14
                             }, this),
                             "ädor",
@@ -1059,39 +1250,65 @@ function GamePage() {
                                 children: roomCode
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 125,
+                                lineNumber: 278,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                        lineNumber: 123,
+                        lineNumber: 276,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: `${__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].turnBadge} ${myTurn ? __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].turnMine : ""}`,
+                        className: `${__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].turnBadge} ${myTurn && !finished ? __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].turnMine : ""}`,
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
-                                children: [
-                                    "Runda ",
-                                    game.round ?? 1
-                                ]
-                            }, void 0, true, {
+                                children: finished ? "Final" : `Runda ${game.round ?? 1}`
+                            }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 282,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                children: myTurn ? "Rândul tău!" : `Rândul lui ${turnName}`
+                                children: finished ? `Câștigă ${winner ? playersData[winner[0]]?.name : "—"}` : myTurn ? "Rândul tău!" : `Rândul lui ${turnName}`
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 130,
+                                lineNumber: 283,
                                 columnNumber: 11
+                            }, this),
+                            !finished && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].timer,
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: `${__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].timerBar} ${urgent ? __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].timerUrgent : ""}`,
+                                        style: {
+                                            width: `${pct}%`
+                                        }
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/game/[roomCode]/page.tsx",
+                                        lineNumber: 292,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: [
+                                            Math.max(0, Math.ceil(remaining)),
+                                            "s"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/game/[roomCode]/page.tsx",
+                                        lineNumber: 293,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/game/[roomCode]/page.tsx",
+                                lineNumber: 291,
+                                columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                        lineNumber: 128,
+                        lineNumber: 281,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1100,14 +1317,25 @@ function GamePage() {
                         children: "Ieși"
                     }, void 0, false, {
                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                        lineNumber: 133,
+                        lineNumber: 298,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                lineNumber: 122,
+                lineNumber: 275,
                 columnNumber: 7
+            }, this),
+            uid && game.players?.[uid] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Chat, {
+                roomCode: roomCode,
+                uid: uid,
+                name: me?.name ?? "Jucător",
+                color: me?.color ?? "#ffffff",
+                variant: "floating"
+            }, void 0, false, {
+                fileName: "[project]/app/game/[roomCode]/page.tsx",
+                lineNumber: 304,
+                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].bottom,
@@ -1116,7 +1344,7 @@ function GamePage() {
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].cards,
                         children: ordered.map(([id])=>{
                             const p = playersData[id];
-                            const active = id === turnUid;
+                            const active = id === turnUid && !finished;
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: `${__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].card} ${active ? __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].cardActive : ""}`,
                                 children: [
@@ -1131,7 +1359,7 @@ function GamePage() {
                                                 children: p.name
                                             }, void 0, false, {
                                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 315,
                                                 columnNumber: 19
                                             }, this),
                                             id === uid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1139,13 +1367,13 @@ function GamePage() {
                                                 children: "tu"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 316,
                                                 columnNumber: 34
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 314,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1156,7 +1384,7 @@ function GamePage() {
                                                 children: game.players[id]?.score ?? 0
                                             }, void 0, false, {
                                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                                lineNumber: 150,
+                                                lineNumber: 319,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1167,25 +1395,25 @@ function GamePage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                                lineNumber: 151,
+                                                lineNumber: 320,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 318,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, id, true, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 144,
+                                lineNumber: 313,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                        lineNumber: 139,
+                        lineNumber: 308,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1196,7 +1424,7 @@ function GamePage() {
                                 children: "Cucerire"
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 159,
+                                lineNumber: 328,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1204,7 +1432,7 @@ function GamePage() {
                                 children: selected ?? "Niciun teritoriu"
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 160,
+                                lineNumber: 329,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1212,41 +1440,42 @@ function GamePage() {
                                 children: info
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 161,
+                                lineNumber: 330,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].btn,
-                                disabled: !canClaim,
-                                onClick: handleClaim,
+                                disabled: !canConfirm,
+                                onClick: confirmPinned,
                                 children: claiming ? "Se salvează…" : btnText
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                                lineNumber: 162,
+                                lineNumber: 331,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/game/[roomCode]/page.tsx",
-                        lineNumber: 158,
+                        lineNumber: 327,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/game/[roomCode]/page.tsx",
-                lineNumber: 138,
+                lineNumber: 307,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/game/[roomCode]/page.tsx",
-        lineNumber: 112,
+        lineNumber: 264,
         columnNumber: 5
     }, this);
 }
-_s(GamePage, "vZMAFlw8eL7gGipRKoS0XQMuyck=", false, function() {
+_s(GamePage, "fFR4kcQNWR6F2jffM6S3jzbQqQQ=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
+        useTerritories
     ];
 });
 _c = GamePage;

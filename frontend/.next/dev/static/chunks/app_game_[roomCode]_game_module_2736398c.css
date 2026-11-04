@@ -279,4 +279,54 @@
   }
 }
 
+.game-module__iz5jkW__turnBadge {
+  min-width: 210px;
+}
+
+.game-module__iz5jkW__timer {
+  background: var(--input-bg);
+  border: 1px solid var(--line-dim);
+  border-radius: 8px;
+  height: 16px;
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-module__iz5jkW__timerBar {
+  background: linear-gradient(var(--green-bright), var(--green));
+  transition: width .2s linear;
+  position: absolute;
+  inset: 0 auto 0 0;
+}
+
+.game-module__iz5jkW__timerUrgent {
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
+  animation: .5s ease-in-out infinite alternate game-module__iz5jkW__urgent;
+}
+
+@keyframes game-module__iz5jkW__urgent {
+  from {
+    filter: brightness();
+  }
+
+  to {
+    filter: brightness(1.5);
+  }
+}
+
+.game-module__iz5jkW__timer span {
+  letter-spacing: 1px;
+  color: var(--text);
+  text-shadow: 0 1px 2px #000c;
+  font-size: 11px;
+  line-height: 16px;
+  display: block;
+  position: relative;
+}
+
+.game-module__iz5jkW__mapArea {
+  z-index: 0;
+}
+
 /*# sourceMappingURL=app_game_%5BroomCode%5D_game_module_2736398c.css.map*/

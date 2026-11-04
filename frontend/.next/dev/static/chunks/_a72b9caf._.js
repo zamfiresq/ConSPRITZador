@@ -65,6 +65,8 @@ __turbopack_context__.s([
     ()=>MAX_PLAYERS,
     "PALETTE",
     ()=>PALETTE,
+    "allowedTerritories",
+    ()=>allowedTerritories,
     "cleanName",
     ()=>cleanName,
     "colorFor",
@@ -120,6 +122,13 @@ function generateRoomCode(len = 5) {
 function cleanName(raw, fallback) {
     const n = raw.trim().slice(0, 16);
     return n || fallback;
+}
+function allowedTerritories(territories, zones, uid) {
+    const free = territories.filter((t)=>!zones[t.id]);
+    const mine = new Set(territories.filter((t)=>zones[t.id] === uid).map((t)=>t.id));
+    if (mine.size === 0) return free.map((t)=>t.id);
+    const adjacent = free.filter((t)=>t.neighbors.some((n)=>mine.has(n)));
+    return (adjacent.length ? adjacent : free).map((t)=>t.id);
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

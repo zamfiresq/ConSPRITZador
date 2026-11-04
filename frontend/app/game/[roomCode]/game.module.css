@@ -257,3 +257,48 @@
     font-size: 24px;
   }
 }
+
+/* ───────── cronometru ───────── */
+.turnBadge {
+  min-width: 210px;
+}
+.timer {
+  position: relative;
+  margin-top: 6px;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--input-bg);
+  border: 1px solid var(--line-dim);
+}
+.timerBar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(var(--green-bright), var(--green));
+  transition: width 0.2s linear;
+}
+.timerUrgent {
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
+  animation: urgent 0.5s ease-in-out infinite alternate;
+}
+@keyframes urgent {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.5);
+  }
+}
+.timer span {
+  position: relative;
+  display: block;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  color: var(--text);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.mapArea {
+  z-index: 0; /* stivă proprie: etichetele de pe hartă nu mai acoperă chatul */
+}

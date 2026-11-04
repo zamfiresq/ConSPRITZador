@@ -163,11 +163,17 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$firebase$2f$firestore$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/firebase/firestore/dist/esm/index.esm.js [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@firebase/firestore/dist/index.esm.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/lib/firebase.ts [app-client] (ecmascript) <locals>");
+(()=>{
+    const e = new Error("Cannot find module '@/components/Chat'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/game-utils.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$ui$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__ = __turbopack_context__.i("[project]/app/ui.module.css [app-client] (css module)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -250,7 +256,7 @@ function LobbyPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                        lineNumber: 56,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -259,18 +265,18 @@ function LobbyPage() {
                         children: "← Acasă"
                     }, void 0, false, {
                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                        lineNumber: 57,
+                        lineNumber: 58,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                lineNumber: 55,
+                lineNumber: 56,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-            lineNumber: 54,
+            lineNumber: 55,
             columnNumber: 7
         }, this);
     }
@@ -282,12 +288,12 @@ function LobbyPage() {
                 children: "Se încarcă camera…"
             }, void 0, false, {
                 fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                lineNumber: 67,
+                lineNumber: 68,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-            lineNumber: 66,
+            lineNumber: 67,
             columnNumber: 7
         }, this);
     }
@@ -300,6 +306,7 @@ function LobbyPage() {
             await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateDoc"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["db"], "games", roomCode), {
                 status: "running",
                 currentTurn: lobby.hostId,
+                turnNumber: 0,
                 round: 1,
                 zones: {}
             });
@@ -326,17 +333,17 @@ function LobbyPage() {
                     children: [
                         "Con",
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            children: "SPRITZ"
+                            children: "spritz"
                         }, void 0, false, {
                             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                            lineNumber: 105,
+                            lineNumber: 107,
                             columnNumber: 14
                         }, this),
-                        "ador"
+                        "ädor"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 104,
+                    lineNumber: 106,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -344,7 +351,7 @@ function LobbyPage() {
                     children: "Lobby"
                 }, void 0, false, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 107,
+                    lineNumber: 109,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -352,7 +359,7 @@ function LobbyPage() {
                     children: roomCode
                 }, void 0, false, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 109,
+                    lineNumber: 111,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -362,12 +369,12 @@ function LobbyPage() {
                         children: copied ? "Copiat ✓" : "Copiază codul"
                     }, void 0, false, {
                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                        lineNumber: 111,
+                        lineNumber: 113,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 110,
+                    lineNumber: 112,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -383,7 +390,7 @@ function LobbyPage() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                        lineNumber: 119,
+                                        lineNumber: 121,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -391,7 +398,7 @@ function LobbyPage() {
                                         children: p.name
                                     }, void 0, false, {
                                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 122,
                                         columnNumber: 15
                                     }, this),
                                     id === lobby.hostId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -399,7 +406,7 @@ function LobbyPage() {
                                         children: "gazdă"
                                     }, void 0, false, {
                                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                        lineNumber: 121,
+                                        lineNumber: 123,
                                         columnNumber: 39
                                     }, this),
                                     id === uid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -407,13 +414,13 @@ function LobbyPage() {
                                         children: "tu"
                                     }, void 0, false, {
                                         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                        lineNumber: 122,
+                                        lineNumber: 124,
                                         columnNumber: 30
                                     }, this)
                                 ]
                             }, id, true, {
                                 fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                lineNumber: 118,
+                                lineNumber: 120,
                                 columnNumber: 13
                             }, this)),
                         Array.from({
@@ -423,13 +430,13 @@ function LobbyPage() {
                                 children: "Se așteaptă un jucător…"
                             }, `empty-${i}`, false, {
                                 fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                                lineNumber: 126,
+                                lineNumber: 128,
                                 columnNumber: 13
                             }, this))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 116,
+                    lineNumber: 118,
                     columnNumber: 9
                 }, this),
                 !isMember && uid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -441,14 +448,14 @@ function LobbyPage() {
                             children: "Intră cu codul"
                         }, void 0, false, {
                             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                            lineNumber: 134,
+                            lineNumber: 136,
                             columnNumber: 40
                         }, this),
                         "."
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 133,
+                    lineNumber: 135,
                     columnNumber: 11
                 }, this),
                 isHost ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -460,7 +467,7 @@ function LobbyPage() {
                             children: starting ? "Se pornește…" : "Pornește jocul"
                         }, void 0, false, {
                             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                            lineNumber: 140,
+                            lineNumber: 142,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,7 +475,7 @@ function LobbyPage() {
                             children: ordered.length < __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MAX_PLAYERS"] ? `Recomandat ${__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MAX_PLAYERS"]} jucători (acum: ${ordered.length}).` : "Toți jucătorii sunt aici!"
                         }, void 0, false, {
                             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                            lineNumber: 143,
+                            lineNumber: 145,
                             columnNumber: 13
                         }, this)
                     ]
@@ -477,18 +484,29 @@ function LobbyPage() {
                     children: "Se așteaptă ca gazda să pornească jocul…"
                 }, void 0, false, {
                     fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-                    lineNumber: 150,
+                    lineNumber: 152,
+                    columnNumber: 11
+                }, this),
+                isMember && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Chat, {
+                    roomCode: roomCode,
+                    uid: uid,
+                    name: lobby.players[uid]?.name ?? "Jucător",
+                    color: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$game$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["colorFor"])(lobby.players[uid], ordered.findIndex(([id])=>id === uid)),
+                    variant: "inline"
+                }, void 0, false, {
+                    fileName: "[project]/app/lobby/[roomCode]/page.tsx",
+                    lineNumber: 156,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-            lineNumber: 103,
+            lineNumber: 105,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/lobby/[roomCode]/page.tsx",
-        lineNumber: 102,
+        lineNumber: 104,
         columnNumber: 5
     }, this);
 }

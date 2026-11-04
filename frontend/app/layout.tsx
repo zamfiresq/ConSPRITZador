@@ -4,8 +4,6 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./theme.css";
 
-// Titlu: Helmswald Post (blackletter) · Text/UI: Steagal.
-// Steagal nu are "ț"/"Ț", deci DM Sans rămâne ca rezervă pentru caracterele lipsă.
 const display = localFont({
   src: "./fonts/Helmswald_Post_F.otf",
   variable: "--font-display-loaded",
@@ -23,7 +21,7 @@ const fallback = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Conspritzädor",
-  description: "Cucerește cartierele Bucureștiului. Răspunde rapid. Controlează harta.",
+  description: "Care cucerește mai mare Bucureștiul?",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

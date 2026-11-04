@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
+import Chat from "@/components/Chat";
 import { MAX_PLAYERS, Player, colorFor, orderPlayers } from "@/lib/game-utils";
 import ui from "../../ui.module.css";
 
@@ -79,6 +80,7 @@ export default function LobbyPage() {
       await updateDoc(doc(db, "games", roomCode), {
         status: "running",
         currentTurn: lobby.hostId,
+        turnNumber: 0,
         round: 1,
         zones: {},
       });
@@ -148,6 +150,16 @@ export default function LobbyPage() {
           </>
         ) : (
           <div className={ui.hint}>Se așteaptă ca gazda să pornească jocul…</div>
+        )}
+
+        {isMember && (
+          <Chat
+            roomCode={roomCode}
+            uid={uid}
+            name={lobby.players[uid]?.name ?? "Jucător"}
+            color={colorFor(lobby.players[uid], ordered.findIndex(([id]) => id === uid))}
+            variant="inline"
+          />
         )}
       </div>
     </div>

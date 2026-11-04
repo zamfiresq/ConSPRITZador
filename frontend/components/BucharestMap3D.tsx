@@ -1,29 +1,20 @@
 'use client';
 
 /**
- * Harta 3D in stil ConQUIZtador: 15 teritorii extrudate, cu santuri intre ele,
- * camera inclinata, culori de jucator + emblema, sageata rosie pentru tinta curenta.
- *
- * Datele vin din /data/territories.json (generat de scripts/build_territories.py).
- * API-ul public ramane compatibil cu versiunea veche:
- *   onDistrictClick({ id, properties: { name, sector }, neighbors })
+ * Harta 3D în stil ConQUIZtador.
+ *  - teritoriile vin din /data/territories.json (scripts/build_territories.py)
+ *  - allowedDistricts: dacă e dat, doar acele teritorii pot fi alese (pulsează);
+ *    restul teritoriilor libere sunt întunecate și nu răspund la click
+ *  - animații: săgeata cade pe teritoriul ales, cucerirea face săritură + val de culoare
  */
 
 import { Canvas, useFrame, type ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, Html, useCursor } from '@react-three/drei';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { DEFAULT_TERRITORIES_URL, useTerritories, type Territory } from '@/lib/territories';
 
-// ───────────────────────── tipuri ─────────────────────────
-
-export interface Territory {
-  id: string;
-  name: string;
-  sector: string;
-  label: [number, number]; // punct interior pentru emblema (x, y plan)
-  neighbors: string[];
-  polygon: [number, number][];
-}
+export type { Territory };
 
 interface PlayerInfo {
   color: string;
@@ -31,30 +22,40 @@ interface PlayerInfo {
 }
 
 interface BucharestMap3DProps {
+  dataUrl?: string;
   onDistrictClick?: (district: {
     id: string;
     properties: { name: string; sector: string };
     neighbors: string[];
   }) => void;
-  /** fisierul cu teritorii: '/data/territories.json' (6 sectoare) sau '/data/territories-cartiere.json' (15 cartiere) */
-  dataUrl?: string;
   selectedDistrict?: string | null;
-  /** teritoriul indicat de sageata (implicit = selectedDistrict) */
+  /** teritoriul indicat de săgeată (implicit = selectedDistrict) */
   targetDistrict?: string | null;
-  /** nu mai e folosit, pastrat pentru compatibilitate */
-  players?: { id: string; name: string; position: [number, number] }[];
-  zones?: Record<string, string>; // numeTeritoriu -> uidJucator
+  /** null/undefined = fără restricții; altfel doar aceste id-uri pot fi alese */
+  allowedDistricts?: string[] | null;
+  zones?: Record<string, string>; // idTeritoriu -> uidJucator
   playersData?: Record<string, PlayerInfo>; // uidJucator -> { color, name }
 }
 
-// ───────────────────────── constante de stil ─────────────────────────
+// ───────────────────────── stil ─────────────────────────
 
-const DEPTH = 0.32; // inaltimea placilor
-const BEVEL = 0.05; // latimea santului dintre teritorii
-const UNOWNED_TOP = '#efe2a8'; // crem, ca in captura
+const DEPTH = 0.32;
+const BEVEL = 0.05;
+const UNOWNED_TOP = '#efe2a8';
 const UNOWNED_SIDE = '#8a6a3a';
+const DIMMED_TOP = '#44514a';
+const DIMMED_SIDE = '#2a3430';
 
-// ───────────────────────── emblema ─────────────────────────
+function easeOutBounce(x: number): number {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+  if (x < 1 / d1) return n1 * x * x;
+  if (x < 2 / d1) return n1 * (x -= 1.5 / d1) * x + 0.75;
+  if (x < 2.5 / d1) return n1 * (x -= 2.25 / d1) * x + 0.9375;
+  return n1 * (x -= 2.625 / d1) * x + 0.984375;
+}
+
+// ───────────────────────── emblemă ─────────────────────────
 
 function Emblem({ color }: { color: string }) {
   return (
@@ -108,24 +109,32 @@ function OwnerTag({ name, color, label }: { name?: string; color?: string; label
   );
 }
 
-// ───────────────────────── sageata ─────────────────────────
+// ───────────────────────── săgeata ─────────────────────────
 
 function TargetArrow({ x, z }: { x: number; z: number }) {
   const ref = useRef<THREE.Group>(null);
+  const start = useRef<number | null>(null);
+
   useFrame((state) => {
-    if (ref.current) {
-      ref.current.position.y = DEPTH + 0.95 + Math.sin(state.clock.elapsedTime * 3) * 0.22;
-    }
+    const g = ref.current;
+    if (!g) return;
+    const now = state.clock.elapsedTime;
+    if (start.current === null) start.current = now;
+    const t = now - start.current;
+    // cade de sus și ricoșează, apoi plutește
+    const DROP = 0.55;
+    const drop = t < DROP ? (1 - easeOutBounce(t / DROP)) * 5 : 0;
+    const bob = t < DROP ? 0 : Math.sin((t - DROP) * 3) * 0.22;
+    g.position.y = DEPTH + 0.95 + drop + bob;
   });
+
   return (
     <group position={[x, 0, z]}>
-      <group ref={ref}>
-        {/* varf (con) cu tipul in jos */}
+      <group ref={ref} position={[0, DEPTH + 6, 0]}>
         <mesh rotation={[Math.PI, 0, 0]} position={[0, -0.35, 0]} castShadow>
           <coneGeometry args={[0.55, 0.9, 24]} />
           <meshStandardMaterial color="#c4452b" roughness={0.45} metalness={0.1} />
         </mesh>
-        {/* coada */}
         <mesh position={[0, 0.65, 0]} castShadow>
           <cylinderGeometry args={[0.2, 0.2, 1.1, 20]} />
           <meshStandardMaterial color="#d9583a" roughness={0.45} metalness={0.1} />
@@ -143,6 +152,9 @@ function Territory3D({
   owner,
   isHovered,
   isSelected,
+  dimmed,
+  pulsing,
+  selectable,
   onHover,
   onSelect,
 }: {
@@ -151,10 +163,20 @@ function Territory3D({
   owner?: PlayerInfo;
   isHovered: boolean;
   isSelected: boolean;
+  dimmed: boolean;
+  pulsing: boolean;
+  selectable: boolean;
   onHover: (id: string | null) => void;
   onSelect: (t: Territory) => void;
 }) {
   const lift = useRef<THREE.Group>(null);
+  const topMat = useRef<THREE.MeshStandardMaterial>(null);
+  const ring = useRef<THREE.Mesh>(null);
+  const baseY = useRef(-1.6);
+
+  const ownerKey = owner?.color ?? '';
+  const prevOwnerKey = useRef(ownerKey);
+  const popStart = useRef<number | null>(null);
 
   const geometry = useMemo(() => {
     const shape = new THREE.Shape(t.polygon.map(([x, y]) => new THREE.Vector2(x, y)));
@@ -164,7 +186,7 @@ function Territory3D({
       bevelEnabled: true,
       bevelThickness: BEVEL,
       bevelSize: BEVEL,
-      bevelOffset: -BEVEL, // santul ramane IN interiorul conturului => placile nu se suprapun
+      bevelOffset: -BEVEL,
       bevelSegments: 2,
     });
   }, [t.polygon]);
@@ -172,15 +194,14 @@ function Territory3D({
   useEffect(() => () => geometry.dispose(), [geometry]);
 
   const { top, side } = useMemo(() => {
-    if (!owner) return { top: new THREE.Color(UNOWNED_TOP), side: new THREE.Color(UNOWNED_SIDE) };
-    const base = new THREE.Color(owner.color);
-    return {
-      top: base.clone().lerp(new THREE.Color('#ffffff'), 0.1),
-      side: base.clone().multiplyScalar(0.5),
-    };
-  }, [owner]);
+    if (owner) {
+      const base = new THREE.Color(owner.color);
+      return { top: base.clone().lerp(new THREE.Color('#ffffff'), 0.1), side: base.clone().multiplyScalar(0.5) };
+    }
+    if (dimmed) return { top: new THREE.Color(DIMMED_TOP), side: new THREE.Color(DIMMED_SIDE) };
+    return { top: new THREE.Color(UNOWNED_TOP), side: new THREE.Color(UNOWNED_SIDE) };
+  }, [owner, dimmed]);
 
-  // animatie de aparitie (placile "cresc" pe rand) + ridicare la hover/selectie
   useLayoutEffect(() => {
     if (lift.current) lift.current.position.y = -1.6;
   }, []);
@@ -188,17 +209,55 @@ function Territory3D({
   useFrame((state, delta) => {
     const g = lift.current;
     if (!g) return;
-    const appear = state.clock.elapsedTime - index * 0.07;
-    const target = appear < 0 ? -1.6 : isSelected ? 0.3 : isHovered ? 0.14 : 0;
-    g.position.y = THREE.MathUtils.damp(g.position.y, target, 9, delta);
+    const now = state.clock.elapsedTime;
+
+    // a primit un proprietar acum => animația de cucerire
+    if (prevOwnerKey.current !== ownerKey) {
+      if (!prevOwnerKey.current && ownerKey) popStart.current = now;
+      prevOwnerKey.current = ownerKey;
+    }
+    const t0 = popStart.current === null ? Infinity : now - popStart.current;
+
+    // aparițe la încărcare + ridicare la hover/selecție
+    const appear = now - index * 0.07;
+    const target = appear < 0 ? -1.6 : isSelected ? 0.3 : isHovered && selectable ? 0.14 : 0;
+    baseY.current = THREE.MathUtils.damp(baseY.current, target, 9, delta);
+
+    // săritură cu ricoșeu + flash la cucerire
+    let bounce = 0;
+    let flash = 0;
+    if (t0 < 1.6) {
+      bounce = 0.9 * Math.exp(-3 * t0) * Math.abs(Math.cos(7 * t0));
+      flash = 1.4 * Math.exp(-3.5 * t0);
+    }
+    g.position.y = baseY.current + bounce;
+
+    const m = topMat.current;
+    if (m) {
+      const base = isSelected ? 0.28 : isHovered && selectable ? 0.16 : 0.04;
+      const pulse = pulsing && !isSelected ? 0.06 + 0.05 * Math.sin(now * 4 + index) : 0;
+      m.emissiveIntensity = base + pulse + flash;
+    }
+
+    // val de culoare care se extinde din centrul teritoriului
+    const r = ring.current;
+    if (r) {
+      if (t0 < 1.1) {
+        r.visible = true;
+        const s = 0.6 + t0 * 9;
+        r.scale.set(s, s, s);
+        (r.material as THREE.MeshBasicMaterial).opacity = Math.max(0, 0.9 * (1 - t0 / 1.1));
+      } else if (r.visible) {
+        r.visible = false;
+      }
+    }
   });
 
   const [lx, ly] = t.label;
-  const showTag = !!owner || isHovered || isSelected;
+  const showTag = !!owner || (isHovered && selectable) || isSelected;
 
   return (
     <group ref={lift}>
-      {/* shape-ul e in planul XY; il culcam: y(nord) -> -z, extrudarea -> sus */}
       <mesh
         geometry={geometry}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -206,24 +265,31 @@ function Territory3D({
         receiveShadow
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
           e.stopPropagation();
-          onHover(t.id);
+          onHover(selectable ? t.id : null);
         }}
         onPointerOut={() => onHover(null)}
         onClick={(e: ThreeEvent<MouseEvent>) => {
-          if (e.delta > 4) return; // a fost drag (rotire camera), nu click
+          if (e.delta > 4) return; // drag (rotire cameră), nu click
           e.stopPropagation();
-          onSelect(t);
+          if (selectable) onSelect(t);
         }}
       >
         <meshStandardMaterial
+          ref={topMat}
           attach="material-0"
           color={top}
           emissive={top}
-          emissiveIntensity={isSelected ? 0.28 : isHovered ? 0.16 : 0.04}
+          emissiveIntensity={0.04}
           roughness={0.55}
           metalness={0.05}
         />
         <meshStandardMaterial attach="material-1" color={side} roughness={0.8} />
+      </mesh>
+
+      {/* valul de la cucerire */}
+      <mesh ref={ring} position={[lx, DEPTH + 0.08, -ly]} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
+        <ringGeometry args={[0.8, 1, 48]} />
+        <meshBasicMaterial color={top} transparent opacity={0} depthWrite={false} />
       </mesh>
 
       {showTag && (
@@ -235,11 +301,7 @@ function Territory3D({
           style={{ pointerEvents: 'none', userSelect: 'none' }}
         >
           {owner ? (
-            <OwnerTag
-              name={owner.name}
-              color={owner.color}
-              label={isHovered || isSelected ? t.name : undefined}
-            />
+            <OwnerTag name={owner.name} color={owner.color} label={isHovered || isSelected ? t.name : undefined} />
           ) : (
             <OwnerTag name={t.name} />
           )}
@@ -255,6 +317,7 @@ function Scene({
   territories,
   selectedDistrict,
   targetDistrict,
+  allowedDistricts,
   zones,
   playersData,
   onSelect,
@@ -262,6 +325,7 @@ function Scene({
   territories: Territory[];
   selectedDistrict?: string | null;
   targetDistrict?: string | null;
+  allowedDistricts?: string[] | null;
   zones: Record<string, string>;
   playersData: Record<string, PlayerInfo>;
   onSelect: (t: Territory) => void;
@@ -269,6 +333,7 @@ function Scene({
   const [hovered, setHovered] = useState<string | null>(null);
   useCursor(!!hovered);
 
+  const allowedSet = useMemo(() => (allowedDistricts ? new Set(allowedDistricts) : null), [allowedDistricts]);
   const arrowTarget = territories.find((t) => t.id === (targetDistrict ?? selectedDistrict));
 
   return (
@@ -289,7 +354,6 @@ function Scene({
         shadow-bias={-0.0004}
       />
 
-      {/* sol: primeste doar umbre, fundalul vine din CSS */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -BEVEL - 0.01, 0]} receiveShadow>
         <planeGeometry args={[80, 80]} />
         <shadowMaterial opacity={0.38} />
@@ -297,21 +361,26 @@ function Scene({
 
       {territories.map((t, i) => {
         const ownerUid = zones[t.id];
+        const owner = ownerUid ? playersData[ownerUid] : undefined;
+        const allowed = !allowedSet || allowedSet.has(t.id);
         return (
           <Territory3D
             key={t.id}
             t={t}
             index={i}
-            owner={ownerUid ? playersData[ownerUid] : undefined}
+            owner={owner}
             isHovered={hovered === t.id}
             isSelected={selectedDistrict === t.id}
+            dimmed={!!allowedSet && !allowed && !owner}
+            pulsing={!!allowedSet && allowed}
+            selectable={allowed}
             onHover={setHovered}
             onSelect={onSelect}
           />
         );
       })}
 
-      {arrowTarget && <TargetArrow x={arrowTarget.label[0]} z={-arrowTarget.label[1]} />}
+      {arrowTarget && <TargetArrow key={arrowTarget.id} x={arrowTarget.label[0]} z={-arrowTarget.label[1]} />}
 
       <OrbitControls
         makeDefault
@@ -330,32 +399,18 @@ function Scene({
   );
 }
 
-// ───────────────────────── componenta exportata ─────────────────────────
+// ───────────────────────── componenta exportată ─────────────────────────
 
 export default function BucharestMap3D({
-  dataUrl = '/data/territories.json',
+  dataUrl = DEFAULT_TERRITORIES_URL,
   onDistrictClick,
   selectedDistrict,
   targetDistrict,
+  allowedDistricts,
   zones = {},
   playersData = {},
 }: BucharestMap3DProps) {
-  const [territories, setTerritories] = useState<Territory[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(dataUrl)
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then((d) => !cancelled && setTerritories(d.territories as Territory[]))
-      .catch((e) => !cancelled && setError(String(e)));
-    return () => {
-      cancelled = true;
-    };
-  }, [dataUrl]);
+  const { territories, error } = useTerritories(dataUrl);
 
   const handleSelect = (t: Territory) =>
     onDistrictClick?.({ id: t.id, properties: { name: t.name, sector: t.sector }, neighbors: t.neighbors });
@@ -368,7 +423,7 @@ export default function BucharestMap3D({
         height: '100%',
         minHeight: 360,
         overflow: 'hidden',
-        background: 'var(--map-bg, radial-gradient(ellipse at 50% 38%, #2f5a3d 0%, #203d29 48%, #0b1610 100%))',
+        background: 'var(--map-bg, radial-gradient(ellipse at 50% 38%, #1d3b29 0%, #122419 48%, #060d09 100%))',
       }}
     >
       {!territories && !error && (
@@ -401,16 +456,12 @@ export default function BucharestMap3D({
       )}
 
       {territories && (
-        <Canvas
-          shadows
-          flat /* fara tone-mapping => cremul ramane crem, nu gri */
-          dpr={[1, 2]}
-          camera={{ position: [0, 27, 21], fov: 32, near: 0.5, far: 200 }}
-        >
+        <Canvas shadows flat dpr={[1, 2]} camera={{ position: [0, 27, 21], fov: 32, near: 0.5, far: 200 }}>
           <Scene
             territories={territories}
             selectedDistrict={selectedDistrict}
             targetDistrict={targetDistrict}
+            allowedDistricts={allowedDistricts}
             zones={zones}
             playersData={playersData}
             onSelect={handleSelect}
@@ -418,7 +469,6 @@ export default function BucharestMap3D({
         </Canvas>
       )}
 
-      {/* vignette */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', boxShadow: 'inset 0 0 120px 30px rgba(0,0,0,.55)' }} />
     </div>
   );

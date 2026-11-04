@@ -166,7 +166,8 @@ def main():
             if i == j:
                 continue
             d = np.hypot(*(a["poly"][:, None, :] - b["poly"][None, :, :]).transpose(2, 0, 1))
-            if (d.min(1) < EPS).sum() >= 2:
+            # sectoare: contactele punctuale (ex. S1-S3 in centru) nu sunt granita reala
+            if (d.min(1) < EPS).sum() >= (25 if MODE == "sectors" else 2):
                 a["neighbors"].append(b["name"])
 
     out = []

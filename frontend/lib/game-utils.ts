@@ -51,3 +51,21 @@ export function cleanName(raw: string, fallback: string): string {
   const n = raw.trim().slice(0, 16);
   return n || fallback;
 }
+
+/**
+ * Teritoriile pe care le poate alege `uid` acum:
+ *  - prima alegere: orice teritoriu liber;
+ *  - apoi: doar teritorii libere VECINE cu ale lui;
+ *  - dacă nu mai are niciun vecin liber, poate alege orice teritoriu liber.
+ */
+export function allowedTerritories(
+  territories: { id: string; neighbors: string[] }[],
+  zones: Record<string, string>,
+  uid: string
+): string[] {
+  const free = territories.filter((t) => !zones[t.id]);
+  const mine = new Set(territories.filter((t) => zones[t.id] === uid).map((t) => t.id));
+  if (mine.size === 0) return free.map((t) => t.id);
+  const adjacent = free.filter((t) => t.neighbors.some((n) => mine.has(n)));
+  return (adjacent.length ? adjacent : free).map((t) => t.id);
+}

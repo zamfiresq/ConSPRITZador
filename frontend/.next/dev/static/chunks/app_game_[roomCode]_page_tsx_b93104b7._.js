@@ -10,8 +10,8 @@
   "static/chunks/node_modules_three_build_three_module_f7d46d9b.js",
   "static/chunks/node_modules_@react-three_fiber_dist_0629aedc._.js",
   "static/chunks/node_modules_e66f5409._.js",
-  "static/chunks/_efc2a08c._.js",
-  "static/chunks/app_game_[roomCode]_game_module_2736398c.css"
+  "static/chunks/_5cd248a5._.js",
+  "static/chunks/_2d8e1f7f._.css"
 ],
     source: "dynamic"
 });
