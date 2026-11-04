@@ -102,7 +102,7 @@ export default function LobbyPage() {
     <div className={ui.page}>
       <div className={ui.panel}>
         <div className={ui.brand}>
-          Con<span>SPRITZ</span>ador
+          Con<span>spritz</span>ädor
         </div>
         <div className={ui.title}>Lobby</div>
 

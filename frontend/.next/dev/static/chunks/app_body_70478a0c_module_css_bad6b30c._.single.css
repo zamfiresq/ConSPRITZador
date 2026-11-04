@@ -1,0 +1,25 @@
+/* [project]/app/body_70478a0c.module.css [app-client] (css) */
+@font-face {
+  font-family: body;
+  src: url("../media/Steagal_Re-s.p.b15063f2.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: body Fallback;
+  src: local(Arial);
+  ascent-override: 86.1%;
+  descent-override: 20.65%;
+  line-gap-override: 2.53%;
+  size-adjust: 102.67%;
+}
+
+.body_70478a0c-module__8XC7kq__className {
+  font-family: body, body Fallback;
+}
+
+.body_70478a0c-module__8XC7kq__variable {
+  --font-body-loaded: "body", "body Fallback";
+}
+
+/*# sourceMappingURL=app_body_70478a0c_module_css_bad6b30c._.single.css.map*/

@@ -1,9 +1,9 @@
 /* [project]/app/game/[roomCode]/game.module.css [app-client] (css) */
 .game-module__iz5jkW__root {
-  color: #f6e7bf;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
   --bottom: 128px;
-  background: #1c1109;
-  font-family: Trebuchet MS, Segoe UI, system-ui, sans-serif;
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -33,33 +33,35 @@
 }
 
 .game-module__iz5jkW__brand {
+  font-family: var(--font-display);
   letter-spacing: .4px;
   text-shadow: 0 2px 6px #000000b3;
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.25;
 }
 
 .game-module__iz5jkW__brand span {
-  color: #ffd86b;
+  color: var(--gold);
 }
 
 .game-module__iz5jkW__room {
+  border: 1px solid var(--line);
+  font-family: var(--font-body);
   letter-spacing: 1.5px;
-  color: #ffe9a8;
+  color: var(--gold-soft);
   vertical-align: middle;
   background: #0006;
-  border: 1px solid #8a6a2c;
   border-radius: 999px;
   margin-left: 10px;
   padding: 3px 10px;
-  font-family: ui-monospace, Menlo, monospace;
   font-size: 13px;
 }
 
 .game-module__iz5jkW__turnBadge {
+  border: 2px solid var(--line);
+  background: linear-gradient(var(--panel-top), var(--panel-bot));
   text-align: center;
-  background: linear-gradient(#3b2713, #1f140a);
-  border: 2px solid #8a6a2c;
   border-radius: 10px;
   padding: 8px 20px;
   box-shadow: 0 4px 14px #00000080;
@@ -68,7 +70,7 @@
 .game-module__iz5jkW__turnBadge small {
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #c9a45a;
+  color: var(--label);
   font-size: 11px;
   display: block;
 }
@@ -78,14 +80,14 @@
 }
 
 .game-module__iz5jkW__turnMine {
-  border-color: #ffd86b;
-  box-shadow: 0 0 20px #ffd05a80;
+  border-color: var(--gold);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--gold) 50%, transparent);
 }
 
 .game-module__iz5jkW__leave {
-  color: #e8d49b;
+  border: 1px solid var(--line-dim);
+  color: var(--text-dim);
   background: #00000059;
-  border: 1px solid #5b4120;
   border-radius: 8px;
   padding: 6px 14px;
   font-size: 13px;
@@ -99,7 +101,7 @@
 .game-module__iz5jkW__bottom {
   height: var(--bottom);
   z-index: 5;
-  background: linear-gradient(to top, #0a0603f2 30%, #0a060300);
+  background: linear-gradient(to top, var(--bg-deep) 30%, transparent);
   align-items: flex-end;
   gap: 16px;
   padding: 0 20px 16px;
@@ -118,8 +120,8 @@
 }
 
 .game-module__iz5jkW__card {
-  background: #1b110a;
-  border: 2px solid #5b4120;
+  border: 2px solid var(--line-dim);
+  background: var(--card-bg);
   border-radius: 10px 10px 6px 6px;
   flex: 0 230px;
   min-width: 120px;
@@ -129,9 +131,9 @@
 }
 
 .game-module__iz5jkW__cardActive {
-  border-color: #ffd86b;
+  border-color: var(--gold);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--gold) 55%, transparent);
   transform: translateY(-8px);
-  box-shadow: 0 0 22px #ffd05a8c;
 }
 
 .game-module__iz5jkW__cardTab {
@@ -159,7 +161,7 @@
 
 .game-module__iz5jkW__cardBody {
   text-align: center;
-  background: linear-gradient(#2a1b0e, #150d06);
+  background: linear-gradient(var(--panel-top), var(--input-bg));
   padding: 6px 12px 8px;
 }
 
@@ -173,13 +175,13 @@
 .game-module__iz5jkW__meta {
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #b99556;
+  color: var(--muted);
   font-size: 11px;
 }
 
 .game-module__iz5jkW__action {
-  background: linear-gradient(#3b2713, #1f140a);
-  border: 2px solid #8a6a2c;
+  border: 2px solid var(--line);
+  background: linear-gradient(var(--panel-top), var(--panel-bot));
   border-radius: 10px;
   flex: none;
   width: 290px;
@@ -190,7 +192,7 @@
 .game-module__iz5jkW__actionLabel {
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #c9a45a;
+  color: var(--label);
   font-size: 11px;
 }
 
@@ -201,24 +203,24 @@
 }
 
 .game-module__iz5jkW__actionInfo {
-  color: #d9c28a;
   min-height: 18px;
+  color: var(--text-dim);
   margin-bottom: 8px;
   font-size: 13px;
 }
 
 .game-module__iz5jkW__btn {
-  color: #2b1a05;
-  cursor: pointer;
-  background: linear-gradient(#f6c94b, #c8901d);
-  border: 2px solid #ffe08a;
-  border-radius: 8px;
+  border: 2px solid var(--gold-bright);
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
   width: 100%;
+  color: var(--btn-text);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--btn-shadow), 0 6px 12px #0006;
+  border-radius: 8px;
   padding: 10px 12px;
   font-size: 16px;
   font-weight: 800;
   transition: transform .1s, filter .15s;
-  box-shadow: 0 3px #7a520e, 0 6px 12px #0006;
 }
 
 .game-module__iz5jkW__btn:hover:enabled {
@@ -226,21 +228,21 @@
 }
 
 .game-module__iz5jkW__btn:active:enabled {
+  box-shadow: 0 1px 0 var(--btn-shadow);
   transform: translateY(2px);
-  box-shadow: 0 1px #7a520e;
 }
 
 .game-module__iz5jkW__btn:disabled {
   cursor: not-allowed;
-  color: #8f7a52;
+  border-color: var(--line-dim);
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
   box-shadow: none;
-  background: #3a2a17;
-  border-color: #5b4120;
 }
 
 .game-module__iz5jkW__center {
-  color: #f6e7bf;
-  background: #1c1109;
+  background: var(--bg-deep);
+  color: var(--text);
   justify-content: center;
   align-items: center;
   font-size: 18px;
@@ -273,7 +275,7 @@
   }
 
   .game-module__iz5jkW__brand {
-    font-size: 17px;
+    font-size: 24px;
   }
 }
 

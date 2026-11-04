@@ -4,9 +4,9 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: #1c1109;
-  color: #f6e7bf;
-  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
   --bottom: 128px;
 }
 
@@ -34,32 +34,34 @@
 }
 
 .brand {
-  font-size: 22px;
-  font-weight: 800;
+  font-family: var(--font-display);
+  line-height: 1.25;
+  font-size: 30px;
+  font-weight: 400;
   letter-spacing: 0.4px;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
 }
 .brand span {
-  color: #ffd86b;
+  color: var(--gold);
 }
 .room {
   margin-left: 10px;
   padding: 3px 10px;
   border-radius: 999px;
-  border: 1px solid #8a6a2c;
+  border: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.4);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-body);
   font-size: 13px;
   letter-spacing: 1.5px;
-  color: #ffe9a8;
+  color: var(--gold-soft);
   vertical-align: middle;
 }
 
 .turnBadge {
   padding: 8px 20px;
   border-radius: 10px;
-  border: 2px solid #8a6a2c;
-  background: linear-gradient(#3b2713, #1f140a);
+  border: 2px solid var(--line);
+  background: linear-gradient(var(--panel-top), var(--panel-bot));
   text-align: center;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
@@ -68,22 +70,22 @@
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #c9a45a;
+  color: var(--label);
 }
 .turnBadge strong {
   font-size: 17px;
 }
 .turnMine {
-  border-color: #ffd86b;
-  box-shadow: 0 0 20px rgba(255, 208, 90, 0.5);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--gold) 50%, transparent);
 }
 
 .leave {
   padding: 6px 14px;
   border-radius: 8px;
-  border: 1px solid #5b4120;
+  border: 1px solid var(--line-dim);
   background: rgba(0, 0, 0, 0.35);
-  color: #e8d49b;
+  color: var(--text-dim);
   font-size: 13px;
   text-decoration: none;
 }
@@ -103,7 +105,7 @@
   align-items: flex-end;
   gap: 16px;
   padding: 0 20px 16px;
-  background: linear-gradient(to top, rgba(10, 6, 3, 0.95) 30%, rgba(10, 6, 3, 0));
+  background: linear-gradient(to top, var(--bg-deep) 30%, transparent);
 }
 
 .cards {
@@ -118,15 +120,15 @@
   min-width: 120px;
   overflow: hidden;
   border-radius: 10px 10px 6px 6px;
-  border: 2px solid #5b4120;
-  background: #1b110a;
+  border: 2px solid var(--line-dim);
+  background: var(--card-bg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 .cardActive {
   transform: translateY(-8px);
-  border-color: #ffd86b;
-  box-shadow: 0 0 22px rgba(255, 208, 90, 0.55);
+  border-color: var(--gold);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--gold) 55%, transparent);
 }
 .cardTab {
   display: flex;
@@ -151,7 +153,7 @@
 .cardBody {
   padding: 6px 12px 8px;
   text-align: center;
-  background: linear-gradient(#2a1b0e, #150d06);
+  background: linear-gradient(var(--panel-top), var(--input-bg));
 }
 .score {
   font-size: 30px;
@@ -163,7 +165,7 @@
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #b99556;
+  color: var(--muted);
 }
 
 /* ───────── panoul de acțiune ───────── */
@@ -172,15 +174,15 @@
   width: 290px;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 2px solid #8a6a2c;
-  background: linear-gradient(#3b2713, #1f140a);
+  border: 2px solid var(--line);
+  background: linear-gradient(var(--panel-top), var(--panel-bot));
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
 }
 .actionLabel {
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #c9a45a;
+  color: var(--label);
 }
 .actionTitle {
   margin: 2px 0 2px;
@@ -191,19 +193,19 @@
   min-height: 18px;
   margin-bottom: 8px;
   font-size: 13px;
-  color: #d9c28a;
+  color: var(--text-dim);
 }
 .btn {
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 2px solid #ffe08a;
-  background: linear-gradient(#f6c94b, #c8901d);
-  color: #2b1a05;
+  border: 2px solid var(--gold-bright);
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
+  color: var(--btn-text);
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 3px 0 #7a520e, 0 6px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 3px 0 var(--btn-shadow), 0 6px 12px rgba(0, 0, 0, 0.4);
   transition: transform 0.1s, filter 0.15s;
 }
 .btn:hover:enabled {
@@ -211,13 +213,13 @@
 }
 .btn:active:enabled {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 #7a520e;
+  box-shadow: 0 1px 0 var(--btn-shadow);
 }
 .btn:disabled {
   cursor: not-allowed;
-  border-color: #5b4120;
-  background: #3a2a17;
-  color: #8f7a52;
+  border-color: var(--line-dim);
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
   box-shadow: none;
 }
 
@@ -228,8 +230,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1c1109;
-  color: #f6e7bf;
+  background: var(--bg-deep);
+  color: var(--text);
   font-size: 18px;
 }
 
@@ -252,6 +254,6 @@
     font-size: 22px;
   }
   .brand {
-    font-size: 17px;
+    font-size: 24px;
   }
 }

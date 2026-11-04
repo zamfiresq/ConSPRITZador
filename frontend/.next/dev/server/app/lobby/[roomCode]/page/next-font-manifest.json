@@ -2,8 +2,10 @@
   "pages": {},
   "app": {
     "[project]/app/lobby/[roomCode]/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/9ae69ccf0a67f3e4-s.p.e0d1d72d.woff2",
+      "static/media/115e7a2565b70400-s.p.e440a306.woff2",
+      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
+      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

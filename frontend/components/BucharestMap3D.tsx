@@ -368,7 +368,7 @@ export default function BucharestMap3D({
         height: '100%',
         minHeight: 360,
         overflow: 'hidden',
-        background: 'radial-gradient(ellipse at 50% 38%, #7d5629 0%, #4b3117 48%, #1c1109 100%)',
+        background: 'var(--map-bg, radial-gradient(ellipse at 50% 38%, #2f5a3d 0%, #203d29 48%, #0b1610 100%))',
       }}
     >
       {!territories && !error && (

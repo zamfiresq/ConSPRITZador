@@ -121,7 +121,7 @@ export default function GamePage() {
 
       <div className={styles.top}>
         <div className={styles.brand}>
-          Con<span>SPRITZ</span>ador
+          Con<span>spritz</span>ädor
           <span className={styles.room}>{roomCode}</span>
         </div>
 

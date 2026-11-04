@@ -1,0 +1,49 @@
+/* [project]/app/theme.css [app-client] (css) */
+:root {
+  --bg-deep: #060d09;
+  --bg-mid: #0d1b13;
+  --bg-glow: #1d3b29;
+  --map-bg: radial-gradient(ellipse at 50% 38%, #1d3b29 0%, #122419 48%, #060d09 100%);
+  --panel-top: #213f2c;
+  --panel-bot: #0f2017;
+  --card-bg: #0c1a12;
+  --input-bg: #08110c;
+  --line: #6b9b66;
+  --line-dim: #2e4d36;
+  --text: #f4ece0;
+  --text-dim: #d4dccb;
+  --muted: #94b08f;
+  --label: #a9cc9a;
+  --gold: #f0562a;
+  --gold-soft: #ffc2ad;
+  --gold-bright: #ff8a5c;
+  --green: #203d29;
+  --green-bright: #7fb68c;
+  --btn-top: #ee5a2c;
+  --btn-bot: #c92f10;
+  --btn-text: #fff4e4;
+  --btn-shadow: #6f1805;
+  --disabled-bg: #25382b;
+  --disabled-text: #7f9886;
+  --font-display: var(--font-display-loaded), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-body-loaded), var(--font-fallback-loaded), "Segoe UI", system-ui, sans-serif;
+}
+
+*, :before, :after {
+  box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-synthesis: none;
+}
+
+/*# sourceMappingURL=app_theme_css_bad6b30c._.single.css.map*/

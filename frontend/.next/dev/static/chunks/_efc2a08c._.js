@@ -682,7 +682,7 @@ function BucharestMap3D({ dataUrl = '/data/territories.json', onDistrictClick, s
             height: '100%',
             minHeight: 360,
             overflow: 'hidden',
-            background: 'radial-gradient(ellipse at 50% 38%, #7d5629 0%, #4b3117 48%, #1c1109 100%)'
+            background: 'var(--map-bg, radial-gradient(ellipse at 50% 38%, #2f5a3d 0%, #203d29 48%, #0b1610 100%))'
         },
         children: [
             !territories && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1047,13 +1047,13 @@ function GamePage() {
                         children: [
                             "Con",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: "SPRITZ"
+                                children: "spritz"
                             }, void 0, false, {
                                 fileName: "[project]/app/game/[roomCode]/page.tsx",
                                 lineNumber: 124,
                                 columnNumber: 14
                             }, this),
-                            "ador",
+                            "ädor",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$game$2f5b$roomCode$5d2f$game$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].room,
                                 children: roomCode

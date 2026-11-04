@@ -1,0 +1,25 @@
+/* [project]/app/display_d23cfdbc.module.css [app-client] (css) */
+@font-face {
+  font-family: display;
+  src: url("../media/Helmswald_Post_F-s.p.e783846c.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: display Fallback;
+  src: local(Arial);
+  ascent-override: 166.17%;
+  descent-override: 33.3%;
+  line-gap-override: 0.06%;
+  size-adjust: 86.95%;
+}
+
+.display_d23cfdbc-module__UnBkIa__className {
+  font-family: display, display Fallback;
+}
+
+.display_d23cfdbc-module__UnBkIa__variable {
+  --font-display-loaded: "display", "display Fallback";
+}
+
+/*# sourceMappingURL=app_display_d23cfdbc_module_css_bad6b30c._.single.css.map*/

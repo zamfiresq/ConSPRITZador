@@ -1,43 +1,72 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import styles from "./home.module.css";
+
+const BOTTLE = "/images/jagermeister.png";
+
+// Poza de fundal colorată în verde (duotone prin "multiply") + vignette întunecat
+const BACKGROUND =
+  "radial-gradient(ellipse at 50% 40%, rgba(4,9,6,.35) 0%, rgba(4,9,6,.95) 88%), " +
+  "linear-gradient(#3d6e51, #3d6e51), " +
+  "url('/images/fundal-web.webp')";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-black to-zinc-800 text-white flex items-center justify-center">
-      <main className="w-full max-w-3xl px-6 py-16 text-center">
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
-          Con<span className="text-emerald-400">SPRITZ</span>ador
-        </h1>
+    <div
+      className={styles.page}
+      style={{
+        backgroundImage: BACKGROUND,
+        backgroundBlendMode: "normal, multiply, normal",
+        backgroundSize: "cover",
+        backgroundPosition: "center bottom",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <main className={styles.main}>
+        <div className={styles.stage}>
+          <div className={styles.glow} />
+          <div className={styles.float}>
+            <div className={styles.bottleWrap}>
+              <img className={styles.bottleImg} src={BOTTLE} alt="Sticlă Jägermeister" draggable={false} />
+              {/* reflexia care trece peste sticlă (decupată cu forma sticlei) */}
+              <div
+                className={styles.shine}
+                style={{
+                  WebkitMaskImage: `url(${BOTTLE})`,
+                  maskImage: `url(${BOTTLE})`,
+                  WebkitMaskSize: "100% 100%",
+                  maskSize: "100% 100%",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                }}
+              />
+            </div>
+          </div>
+          <div className={styles.shadow} />
+        </div>
 
-        <p className="text-lg sm:text-xl text-zinc-300 mb-12">
+        <h1 className={styles.title}>
+          Con<span>spritz</span>ädor
+        </h1>
+        <p className={styles.tagline}>
           Cucerește cartierele Bucureștiului.
           <br />
           Răspunde rapid. Controlează harta.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <Link
-            href="/host"
-            className="rounded-xl bg-emerald-500 px-8 py-4 text-lg font-semibold text-black hover:bg-emerald-400 transition"
-          >
-            Host Game
+        <div className={styles.actions}>
+          <Link href="/host" className={styles.btnPrimary}>
+            Creează joc
           </Link>
-
-          <Link
-            href="/join"
-            className="rounded-xl border border-zinc-600 px-8 py-4 text-lg font-semibold text-white hover:bg-zinc-800 transition"
-          >
-            Join Game
+          <Link href="/join" className={styles.btnSecondary}>
+            Intră într-un joc
           </Link>
-        </div>
-
-        <div className="mt-16 text-sm text-zinc-400">
-          <p>
-            Party game privat · Conquiztador-style · București edition
-          </p>
         </div>
       </main>
+
+      <div className={styles.footer}>Party game privat · Ediția Spritz Residence · 2026</div>
     </div>
   );
 }
