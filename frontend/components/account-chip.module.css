@@ -1,0 +1,42 @@
+.chip {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(8, 17, 12, 0.72);
+  color: var(--gold-soft);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+.signed {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
+  color: var(--btn-text);
+  font-size: 11px;
+  font-weight: 800;
+}
+.name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}

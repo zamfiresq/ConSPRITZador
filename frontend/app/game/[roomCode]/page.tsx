@@ -9,6 +9,7 @@ import BucharestMap3D from "@/components/BucharestMap3D";
 import Chat from "@/components/Chat";
 import { useTerritories } from "@/lib/territories";
 import { Player, allowedTerritories, colorFor, orderPlayers } from "@/lib/game-utils";
+import { recordGameFinish } from "@/lib/profile";
 import styles from "./game.module.css";
 
 const TURN_SECONDS = 10; // timp pentru a alege un teritoriu
@@ -87,6 +88,23 @@ export default function GamePage() {
     () => (territories && myTurn && !finished ? allowedTerritories(territories, zones, uid) : null),
     [territories, myTurn, finished, zones, uid]
   );
+
+  useEffect(() => {
+    if (!finished || !uid || !game) return;
+    const count = Object.values(zones).filter((z) => z === uid).length;
+    const ranking = orderPlayers(game.players ?? {}, game.hostId).sort(
+      ([a, pa], [b, pb]) =>
+        Object.values(zones).filter((z) => z === b).length - Object.values(zones).filter((z) => z === a).length ||
+        (pb.score ?? 0) - (pa.score ?? 0)
+    );
+    void recordGameFinish({
+      roomCode,
+      uid,
+      won: ranking[0]?.[0] === uid,
+      territories: count,
+      points: game.players?.[uid]?.score ?? 0,
+    }).catch((e) => console.error("Statistici:", e));
+  }, [finished, uid, game, zones, roomCode]);
 
   // ───────────── alegerea unui teritoriu (tranzacție = fără dubluri) ─────────────
 

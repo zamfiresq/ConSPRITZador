@@ -119,10 +119,20 @@ module.exports = mod;
 __turbopack_context__.s([
     "auth",
     ()=>auth,
+    "authErrorMessage",
+    ()=>authErrorMessage,
     "db",
     ()=>db,
     "ensureUser",
-    ()=>ensureUser
+    ()=>ensureUser,
+    "loginWithEmail",
+    ()=>loginWithEmail,
+    "loginWithGoogle",
+    ()=>loginWithGoogle,
+    "logout",
+    ()=>logout,
+    "registerWithEmail",
+    ()=>registerWithEmail
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$firebase$2f$app$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/firebase/app/dist/index.mjs [app-ssr] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@firebase/app/dist/esm/index.esm.js [app-ssr] (ecmascript)");
@@ -134,6 +144,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2
 ;
 ;
 ;
+async function persistProfile(user, displayName) {
+    const { ensureUserDoc } = await __turbopack_context__.A("[project]/lib/profile.ts [app-ssr] (ecmascript, async loader)");
+    await ensureUserDoc(user, displayName);
+}
 const firebaseConfig = {
     apiKey: "AIzaSyDZZyc8OzHbBRBBs2_8TDdYlps-IF9CFow",
     authDomain: "conspritzador.firebaseapp.com",
@@ -145,9 +159,8 @@ const firebaseConfig = {
 };
 const app = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getApps"])().length ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getApp"])() : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["initializeApp"])(firebaseConfig);
 /**
- * Persistență pe SESIUNE (per tab): fiecare tab primește propriul jucător anonim.
- * Cu persistența implicită (localStorage/IndexedDB) toate tab-urile aceluiași browser
- * împart același uid, deci nu poți testa jocul cu 2-3 ferestre.
+ * Local întâi (conturile înregistrate rămân logate), apoi sesiune (oaspeții
+ * anonimi pe tab, ca să poți testa 2–3 jucători în ferestre diferite).
  */ function makeAuth() {
     if ("TURBOPACK compile-time truthy", 1) return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getAuth"])(app);
     //TURBOPACK unreachable
@@ -155,10 +168,92 @@ const app = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f4
 }
 const auth = makeAuth();
 const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getFirestore"])(app);
+function authErrorMessage(err) {
+    const code = typeof err === "object" && err && "code" in err ? String(err.code) : "";
+    switch(code){
+        case "auth/email-already-in-use":
+        case "auth/credential-already-in-use":
+            return "Există deja un cont cu acest email.";
+        case "auth/invalid-email":
+            return "Adresa de email nu e validă.";
+        case "auth/weak-password":
+            return "Parola trebuie să aibă cel puțin 6 caractere.";
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+        case "auth/invalid-credential":
+            return "Email sau parolă greșită.";
+        case "auth/popup-closed-by-user":
+        case "auth/cancelled-popup-request":
+            return "Autentificarea a fost anulată.";
+        case "auth/operation-not-allowed":
+            return "Metoda de autentificare nu e activată în consola Firebase.";
+        case "auth/too-many-requests":
+            return "Prea multe încercări. Așteaptă puțin.";
+        default:
+            return "Nu am putut autentifica. Încearcă din nou.";
+    }
+}
 async function ensureUser() {
     await auth.authStateReady();
-    if (auth.currentUser) return auth.currentUser;
-    return (await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["signInAnonymously"])(auth)).user;
+    if (auth.currentUser) {
+        await persistProfile(auth.currentUser);
+        return auth.currentUser;
+    }
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserSessionPersistence"]);
+    const cred = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["signInAnonymously"])(auth);
+    await persistProfile(cred.user);
+    return cred.user;
+}
+async function registerWithEmail(email, password, displayName) {
+    const name = displayName.trim().slice(0, 16) || "Jucător";
+    await auth.authStateReady();
+    const current = auth.currentUser;
+    if (current?.isAnonymous) {
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserLocalPersistence"]);
+        const credential = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["EmailAuthProvider"].credential(email, password);
+        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["linkWithCredential"])(current, credential);
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateProfile"])(result.user, {
+            displayName: name
+        });
+        await persistProfile(result.user, name);
+        return result.user;
+    }
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserLocalPersistence"]);
+    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createUserWithEmailAndPassword"])(auth, email, password);
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateProfile"])(result.user, {
+        displayName: name
+    });
+    await persistProfile(result.user, name);
+    return result.user;
+}
+async function loginWithEmail(email, password) {
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserLocalPersistence"]);
+    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["signInWithEmailAndPassword"])(auth, email, password);
+    await persistProfile(result.user);
+    return result.user;
+}
+async function loginWithGoogle() {
+    const provider = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["GoogleAuthProvider"]();
+    await auth.authStateReady();
+    const current = auth.currentUser;
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserLocalPersistence"]);
+    if (current?.isAnonymous) {
+        try {
+            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["linkWithPopup"])(current, provider);
+            await persistProfile(result.user, result.user.displayName ?? undefined);
+            return result.user;
+        } catch (err) {
+            const code = typeof err === "object" && err && "code" in err ? String(err.code) : "";
+            if (code !== "auth/credential-already-in-use" && code !== "auth/email-already-in-use") throw err;
+        }
+    }
+    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["signInWithPopup"])(auth, provider);
+    await persistProfile(result.user, result.user.displayName ?? undefined);
+    return result.user;
+}
+async function logout() {
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["signOut"])(auth);
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPersistence"])(auth, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$auth$2f$dist$2f$node$2d$esm$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["browserSessionPersistence"]);
 }
 ;
 }),

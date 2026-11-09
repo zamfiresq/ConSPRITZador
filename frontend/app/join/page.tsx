@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldPath, updateDoc as updateDocFs } from "firebase/firestore";
+import { useAuth } from "@/lib/auth";
 import { db, doc, getDoc, serverTimestamp, ensureUser } from "@/lib/firebase";
 import { MAX_PLAYERS, Player, cleanName, nextFreeColor } from "@/lib/game-utils";
+import { saveDisplayName } from "@/lib/profile";
 import ui from "../ui.module.css";
 
 export default function JoinPage() {
   const router = useRouter();
+  const { profile } = useAuth();
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (profile?.displayName && !name) setName(profile.displayName);
+  }, [profile?.displayName, name]);
 
   const handleJoin = async () => {
     const roomCode = code.trim().toUpperCase();
@@ -55,8 +62,10 @@ export default function JoinPage() {
         return;
       }
 
+      const display = cleanName(name, "Jucător");
+      await saveDisplayName(uid, display).catch(() => undefined);
       const player: Player = {
-        name: cleanName(name, "Jucător"),
+        name: display,
         color: nextFreeColor(players),
         score: 0,
         joinedAt: serverTimestamp() as unknown as Player["joinedAt"],

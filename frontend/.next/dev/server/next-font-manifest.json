@@ -1,30 +1,12 @@
 {
   "app": {
-    "[project]/app/game/[roomCode]/page": [
-      "static/media/Helmswald_Post_F-s.p.e783846c.otf",
-      "static/media/Steagal_Re-s.p.b15063f2.otf",
-      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
-      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
-    ],
-    "[project]/app/host/page": [
-      "static/media/Helmswald_Post_F-s.p.e783846c.otf",
-      "static/media/Steagal_Re-s.p.b15063f2.otf",
-      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
-      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
-    ],
-    "[project]/app/join/page": [
-      "static/media/Helmswald_Post_F-s.p.e783846c.otf",
-      "static/media/Steagal_Re-s.p.b15063f2.otf",
-      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
-      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
-    ],
-    "[project]/app/lobby/[roomCode]/page": [
-      "static/media/Helmswald_Post_F-s.p.e783846c.otf",
-      "static/media/Steagal_Re-s.p.b15063f2.otf",
-      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
-      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
-    ],
     "[project]/app/page": [
+      "static/media/Helmswald_Post_F-s.p.e783846c.otf",
+      "static/media/Steagal_Re-s.p.b15063f2.otf",
+      "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",
+      "static/media/5c285b27cdda1fe8-s.p.a62025f2.woff2"
+    ],
+    "[project]/app/profile/page": [
       "static/media/Helmswald_Post_F-s.p.e783846c.otf",
       "static/media/Steagal_Re-s.p.b15063f2.otf",
       "static/media/c3cb240f9c892514-s.p.d8e4bce2.woff2",

@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import AccountChip from "@/components/AccountChip";
 import styles from "./home.module.css";
 
 const BOTTLE = "/images/jagermeister.png";
@@ -24,6 +25,7 @@ export default function HomePage() {
         backgroundRepeat: "no-repeat",
       }}
     >
+      <AccountChip />
       <main className={styles.main}>
         <div className={styles.stage}>
           <div className={styles.glow} />

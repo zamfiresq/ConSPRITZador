@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./theme.css";
+import Providers from "@/components/Providers";
 
 const display = localFont({
   src: "./fonts/Helmswald_Post_F.otf",
@@ -27,7 +28,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ro" className={`${display.variable} ${body.variable} ${fallback.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

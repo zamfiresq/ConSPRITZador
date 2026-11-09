@@ -19,6 +19,19 @@
   box-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
   text-align: center;
 }
+.panelWide {
+  max-width: 800px;
+}
+
+.profileColumns {
+  display: flex;
+  gap: 24px;
+}
+
+.profileColumn {
+  flex: 1;
+  min-width: 0;
+}
 .brand {
   font-family: var(--font-display);
   font-size: 40px;
@@ -91,6 +104,178 @@
   background: var(--disabled-bg);
   color: var(--disabled-text);
   box-shadow: none;
+}
+.btnAlt {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px;
+  border-radius: 8px;
+  border: 2px solid var(--green-bright);
+  background: linear-gradient(var(--green), color-mix(in srgb, var(--green) 55%, black));
+  color: var(--gold-soft);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btnAlt:hover:enabled {
+  filter: brightness(1.08);
+}
+.btnAlt:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.split {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.split::before,
+.split::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-dim);
+}
+.switch {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.switch a {
+  color: var(--gold-soft);
+}
+.guestNote {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.profileHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  margin: 8px 0 18px;
+}
+.avatarLg {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--gold);
+  background: linear-gradient(var(--btn-top), var(--btn-bot));
+  color: var(--btn-text);
+  font-size: 22px;
+  font-weight: 800;
+}
+.profileMeta {
+  min-width: 0;
+}
+.profileName {
+  font-size: 22px;
+  font-weight: 800;
+}
+.profileEmail {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 8px 0 18px;
+}
+.stat {
+  padding: 10px 8px;
+  border-radius: 8px;
+  border: 2px solid var(--line-dim);
+  background: var(--input-bg);
+}
+.statValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--gold-soft);
+}
+.statLabel {
+  margin-top: 2px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+.badge {
+  padding: 10px 6px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--line-dim);
+  background: var(--input-bg);
+  opacity: 0.42;
+}
+.badgeOn {
+  opacity: 1;
+  border-color: var(--gold);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--gold) 28%, transparent);
+}
+.badgeIcon {
+  font-size: 26px;
+  line-height: 1.2;
+}
+.badgeName {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.badgeDesc {
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+.saveRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.saveRow .input {
+  flex: 1;
+  width: auto;
+}
+.saveRow .btn {
+  margin-top: 0;
+  width: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  flex: none;
+}
+a.btn {
+  display: block;
+  text-decoration: none;
+}
+.ok {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--green-bright);
+}
+@media (max-width: 520px) {
+  .badgeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .btnGhost {
   display: inline-block;

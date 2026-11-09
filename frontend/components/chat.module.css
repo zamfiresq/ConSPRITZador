@@ -4,6 +4,13 @@
   bottom: calc(var(--bottom, 128px) + 12px);
   z-index: 6;
 }
+/* căsuță fixă în colțul din stânga jos, independentă de layout-ul paginii */
+.dock {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 20;
+}
 .inlineWrap {
   margin-top: 18px;
 }
@@ -150,8 +157,12 @@
 }
 
 @media (max-width: 820px) {
-  .floating {
+  .floating,
+  .dock {
     left: 12px;
+  }
+  .dock {
+    bottom: 12px;
   }
   .panel {
     width: calc(100vw - 24px);

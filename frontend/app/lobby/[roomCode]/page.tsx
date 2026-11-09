@@ -151,17 +151,17 @@ export default function LobbyPage() {
         ) : (
           <div className={ui.hint}>Se așteaptă ca gazda să pornească jocul…</div>
         )}
-
-        {isMember && (
-          <Chat
-            roomCode={roomCode}
-            uid={uid}
-            name={lobby.players[uid]?.name ?? "Jucător"}
-            color={colorFor(lobby.players[uid], ordered.findIndex(([id]) => id === uid))}
-            variant="inline"
-          />
-        )}
       </div>
+
+      {isMember && (
+        <Chat
+          roomCode={roomCode}
+          uid={uid}
+          name={lobby.players[uid]?.name ?? "Jucător"}
+          color={colorFor(lobby.players[uid], ordered.findIndex(([id]) => id === uid))}
+          variant="dock"
+        />
+      )}
     </div>
   );
 }

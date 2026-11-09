@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 import { db, doc, getDoc, setDoc, serverTimestamp, ensureUser } from "@/lib/firebase";
 import { PALETTE, cleanName, generateRoomCode } from "@/lib/game-utils";
+import { recordGameHosted, saveDisplayName } from "@/lib/profile";
 import ui from "../ui.module.css";
 
 export default function HostPage() {
   const router = useRouter();
+  const { profile } = useAuth();
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profile?.displayName && !name) setName(profile.displayName);
+  }, [profile?.displayName, name]);
 
   const handleCreateGame = async () => {
     setLoading(true);
@@ -26,6 +33,8 @@ export default function HostPage() {
         code = generateRoomCode();
       }
 
+      const display = cleanName(name, "Host");
+      await saveDisplayName(uid, display).catch(() => undefined);
       await setDoc(doc(db, "games", code), {
         hostId: uid,
         status: "lobby",
@@ -35,13 +44,14 @@ export default function HostPage() {
         zones: {},
         players: {
           [uid]: {
-            name: cleanName(name, "Host"),
+            name: display,
             color: PALETTE[0],
             score: 0,
             joinedAt: serverTimestamp(),
           },
         },
       });
+      await recordGameHosted(uid);
 
       router.push(`/lobby/${code}`);
     } catch (err) {

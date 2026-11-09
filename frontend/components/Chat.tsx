@@ -21,14 +21,15 @@ interface ChatProps {
   uid: string;
   name: string;
   color: string;
-  /** "floating" = fereastră mică peste joc (cu buton); "inline" = integrat în pagină (lobby) */
-  variant?: "floating" | "inline";
+  /** "floating" = peste joc (ancorat deasupra barei de jos); "dock" = căsuță fixă în colțul ecranului (lobby); "inline" = integrat în pagină */
+  variant?: "floating" | "dock" | "inline";
 }
 
 export default function Chat({ roomCode, uid, name, color, variant = "inline" }: ChatProps) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [text, setText] = useState("");
-  const [open, setOpen] = useState(variant === "inline");
+  const collapsible = variant !== "inline";
+  const [open, setOpen] = useState(!collapsible);
   const [seen, setSeen] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -36,8 +37,8 @@ export default function Chat({ roomCode, uid, name, color, variant = "inline" }:
 
   // pe ecrane late, chatul din joc e deschis implicit
   useEffect(() => {
-    if (variant === "floating" && window.innerWidth >= 1100) setOpen(true);
-  }, [variant]);
+    if (collapsible && window.innerWidth >= 1100) setOpen(true);
+  }, [collapsible]);
 
   useEffect(() => {
     const q = query(collection(db, "games", roomCode, "messages"), orderBy("createdAt", "asc"), limitToLast(100));
@@ -97,9 +98,11 @@ export default function Chat({ roomCode, uid, name, color, variant = "inline" }:
 
   const unread = open ? 0 : Math.max(0, messages.length - seen);
 
-  if (variant === "floating" && !open) {
+  const anchor = variant === "dock" ? styles.dock : styles.floating;
+
+  if (collapsible && !open) {
     return (
-      <div className={styles.floating}>
+      <div className={anchor}>
         <button className={styles.toggle} onClick={() => setOpen(true)}>
           Chat
           {unread > 0 && <span className={styles.badge}>{unread > 9 ? "9+" : unread}</span>}
@@ -109,11 +112,11 @@ export default function Chat({ roomCode, uid, name, color, variant = "inline" }:
   }
 
   return (
-    <div className={variant === "floating" ? styles.floating : styles.inlineWrap}>
+    <div className={collapsible ? anchor : styles.inlineWrap}>
       <div className={styles.panel}>
         <div className={styles.header}>
           <span>Chat</span>
-          {variant === "floating" && (
+          {collapsible && (
             <button className={styles.close} onClick={() => setOpen(false)} aria-label="Închide chatul">
               ×
             </button>
