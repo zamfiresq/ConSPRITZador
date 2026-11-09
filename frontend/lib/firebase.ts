@@ -38,22 +38,7 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-/**
- * Local întâi (conturile înregistrate rămân logate), apoi sesiune (oaspeții
- * anonimi pe tab, ca să poți testa 2–3 jucători în ferestre diferite).
- */
-function makeAuth() {
-  if (typeof window === "undefined") return getAuth(app);
-  try {
-    return initializeAuth(app, {
-      persistence: [browserLocalPersistence, browserSessionPersistence],
-    });
-  } catch {
-    return getAuth(app);
-  }
-}
-
-export const auth = makeAuth();
+export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 export function authErrorMessage(err: unknown): string {
