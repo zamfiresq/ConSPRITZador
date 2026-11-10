@@ -1,6 +1,6 @@
 {
-  "/login/page": "app/login/page.js",
-  "/page": "app/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/register/page": "app/register/page.js"
+  "/game/[roomCode]/page": "app/game/[roomCode]/page.js",
+  "/host/page": "app/host/page.js",
+  "/lobby/[roomCode]/page": "app/lobby/[roomCode]/page.js",
+  "/page": "app/page.js"
 }
